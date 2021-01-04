@@ -1,0 +1,14 @@
+.account--userInfo figure {
+	height: 40px;
+    width: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+/*override*/
+.modal-content{
+    border-radius:0;
+}
+ .uk-offcanvas-bar .uk-nav-primary>li>a{
+     font-size:1rem;
+ }
