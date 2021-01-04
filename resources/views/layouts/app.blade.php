@@ -216,6 +216,14 @@
             border-left: none; /* Prevent double borders */
             cursor: pointer;
         }
+        @media screen and (max-width: 768px) {
+
+            .product-category.white-product .product-top figure .product-image {
+                height: auto;
+                width: 100%;
+            }
+        }
+
     </style>
 
     <link rel="manifest" href="/manifest.json" />

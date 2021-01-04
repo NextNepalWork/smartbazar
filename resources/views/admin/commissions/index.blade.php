@@ -19,15 +19,15 @@
                     </thead>
                     <tbody>
                     @foreach($vendors as $vendor)
-                  
+
                         <form action="{{ route('admin.commission.update') }}" method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="vendor_id" value="{{ $vendor->id }}">
                             <tr>
-                                <td>{{ $vendor->name }}</td>
+                                <td>{{ $vendor->user_name }}</td>
                                 <td>
                                     <div class="@if ($errors->has('commission')) has-error @endif">
-                                    <input type="text" name="commission" class="form-control">
+                                    <input type="number" name="commission" class="form-control" min="0" max="100">
                                     @if ($errors->has('commission'))
                                         <span class="help-block">
                                             {{ $errors->first('commission') }}
@@ -58,7 +58,7 @@
                     @foreach($commissions as $commission)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ \App\User::where('id', $commission->user_id)->first()->name }}</td>
+                            <td>{{ \App\User::where('id', $commission->user_id)->first()->user_name }}</td>
                             <td>{{ $commission->commission }}</td>
                             <td>
                                 <a href="{{ route('admin.commission.edit', $commission->user_id) }}" class="btn btn-default btn-xs"><span class="lnr lnr-pencil"></span></a>
