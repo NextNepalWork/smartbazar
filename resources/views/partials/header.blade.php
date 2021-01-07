@@ -157,7 +157,7 @@
                                 <div class="search_toggler px-3">
                                     <a href="javascript:void(0)" uk-icon="search"></a>
                                 </div>
-
+ 
 
                             </div>
                         </div>
@@ -309,7 +309,7 @@
 
                         <span id="toggle_dd" class="border toggle_dd p-1"><i class="mr-2" uk-icon="menu"></i> All Products </span>
                         <div uk-dropdown="pos: bottom-justify" style="padding:0!important">
-                            <div class="main_dropdown">
+                            <div class="main_dropdown" style="height: auto">
                                 <ul class="menu-items">
 
                                 @foreach($productCategories->take(16) as $menu)                    <!-- submenus -->
@@ -319,15 +319,14 @@
                                         <!-- first submenus -->
                                         @if($menu->subCategory->isNotEmpty())
 
-                                            <ul class="menu-items sub-menus-1">
+                                            <ul class="menu-items sub-menus-1" style="height: auto">
                                                 @foreach($menu->subCategory->take(16) as $child)
                                                     <li class="menu-items--item sub-menus-1-list">
-
                                                         <a title="{{$child->name}}"
                                                            href="{{ url('/') . '/category/' . $child->slug }}">{{ $child->name }}</a>
                                                         <!-- second submenus -->
                                                         @if($child->subCategory->isNotEmpty())
-                                                            <ul class="menu-items sub-menus-2">
+                                                            <ul class="menu-items sub-menus-2" style="height: auto">
 
 
                                                                 @foreach($child->subCategory->take(16) as $subchild)

@@ -14,10 +14,13 @@ class DisputeController extends Controller
     public function index()
     {
         $dispute_list = Dispute::all();
+        if($dispute_list->count()>0){
         foreach ($dispute_list as $dispute)
         {
             $disputes[] = $dispute->product;
         }
+        }
+        $disputes= [];
         return view('admin.disputes.index', compact('disputes', 'dispute_list'));
     }
 

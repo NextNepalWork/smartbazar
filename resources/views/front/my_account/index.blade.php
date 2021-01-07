@@ -13,14 +13,15 @@
                     <div class="notify">
                         <div id="notif-messages" class="alert alert-warning" style="display: block;">
                             <span class="icon-circle-check mr-2"></span>
-                            <i class="fa fa-info-circle "></i> You Have not activated your Account!!! <a href="{{ route('resend.mail', auth()->id()) }}">Click here</a>
+                            <i class="fa fa-info-circle "></i> You Have not activated your Account!!! <a
+                                    href="{{ route('resend.mail', auth()->id()) }}">Click here</a>
                             to resend email
                         </div>
                     </div>
                 @endif
             @endif
-            
- @if(\App\Model\VendorDetail::where('user_id',\Illuminate\Support\Facades\Auth::user()->id)->first())
+
+            @if(\App\Model\VendorDetail::where('user_id',\Illuminate\Support\Facades\Auth::user()->id)->first())
                 @php
                     $vendor_id=\App\Model\VendorDetail::where('user_id',\Illuminate\Support\Facades\Auth::user()->id)->first()->id;
                 @endphp
@@ -29,7 +30,8 @@
                     <div class="notify">
                         <div id="notif-messages" class="alert alert-warning" style="display: block;">
                             <span class="icon-circle-check mr-2"></span>
-                            <i class="fa fa-info-circle "></i> Please Pay Your Registration Fees <a href="{{ route('sell.pay', $vendor_id) }}">Click here</a>
+                            <i class="fa fa-info-circle "></i> Please Pay Your Registration Fees <a
+                                    href="{{ route('sell.pay', $vendor_id) }}">Click here</a>
                             to Pay
                         </div>
                     </div>
@@ -37,13 +39,14 @@
                     <div class="notify">
                         <div id="notif-messages" class="alert alert-warning" style="display: block;">
                             <span class="icon-circle-check mr-2"></span>
-                            <i class="fa fa-info-circle "></i> Please pay Via Esewa or Pay with to our Doorstep <a href="{{ route('sell.pay', $vendor_id) }}">Click here</a>
+                            <i class="fa fa-info-circle "></i> Please pay Via Esewa or Pay with to our Doorstep <a
+                                    href="{{ route('sell.pay', $vendor_id) }}">Click here</a>
                             to Pay
                         </div>
                     </div>
                 @endif
             @endif
-         
+
 
             <div class="accountpage content-wrap ">
                 <div class="main container-fluid">
@@ -57,7 +60,7 @@
                                            style="font-size: 24px;margin-right: 10px;"></i><strong>My
                                             Account </strong>
                                         <br>
-                                                                 
+
                                     </div>
 
                                     <div class="block-content" id="dashboard-nav">
@@ -89,17 +92,32 @@
 
 
                                             </ul>
-  @if(\Illuminate\Support\Facades\Auth::check() && Auth::user()->roles->isnotEmpty() && Auth::user()->roles->first() != null )
-                                            @if(\Illuminate\Support\Facades\Auth::user()->roles->first()->name =='vendor' || \Illuminate\Support\Facades\Auth::user()->roles->first()->name=='Super-Vendor')
+                                            @if(\Illuminate\Support\Facades\Auth::check() && Auth::user()->roles->isnotEmpty() && Auth::user()->roles->first() != null )
+                                                @if(\Illuminate\Support\Facades\Auth::user()->roles->first()->name =='vendor' || \Illuminate\Support\Facades\Auth::user()->roles->first()->name=='Super-Vendor')
 
-                                        <i class="far fa-user-circle"
-                                           style="font-size: 24px;margin-right: 10px;"></i><a
-                                                href="{{ route('vendor.dashboard') }}">Go To
-                                                Dashboard</a>
-                                        @endif
-                                        @endif
+                                                    <div style="margin: 5px 0;padding: 5px 0 0">
+                                                        <a href="{{ route('vendor.dashboard') }}" target="_new">
+                                                            <i class="far fa-user-circle"
+                                                               style="font-size: 24px;margin-right: 10px;"></i>
+                                                            Go To Dashboard</a>
+                                                    </div>
+                                                @endif
+                                            @endif
+                                            @if(\Illuminate\Support\Facades\Auth::check() && Auth::user()->roles->isnotEmpty() && Auth::user()->roles->first() != null )
+                                                @if(\Illuminate\Support\Facades\Auth::user()->roles->first()->name =='admin')
 
-                                            <div class="become_seller"><a onclick="window.open(this.href,'_blank');return false;" class="link" href="{{route('sell.index')}}" >Become
+                                                    <div style="margin: 5px 0;padding: 5px 0 0">
+                                                        <a href="{{ route('admin.index') }}" target="_new">
+                                                            <i class="far fa-user-circle"
+                                                               style="font-size: 24px;margin-right: 10px;"></i>
+                                                            Go To Dashboard</a>
+                                                    </div>
+                                                @endif
+                                            @endif
+
+                                            <div class="become_seller"><a
+                                                        onclick="window.open(this.href,'_blank');return false;"
+                                                        class="link" href="{{route('sell.index')}}">Become
                                                     Seller</a></div>
 
                                         </div>
@@ -361,7 +379,7 @@
                                                             <td>
                                                                 <span class="price">Rs. {{$wishlist->product->sale_price}}</span>
                                                             </td>
-                                                            <td  class="text-center">
+                                                            <td class="text-center">
                                                                 <a class="btn btn-warning btn-sm button__buynow__link buynow"
                                                                    href="{{ route('product.show', $wishlist->product->slug) }}">
                                                                     <span>Buy Now</span></a>

@@ -381,7 +381,7 @@
                                         <span>Buy Now</span></a>
                                 </div>
                                 <div class="mb-2 order_by_call_btn">
-                                    <a class="btn button_order_by_call" href="tel:+977 9843158452">
+                                    <a class="btn button_order_by_call" href="tel:+977 9878987898">
                                         <i class="fas fa-phone-alt"></i>
                                         <span>Order by Phone</span></a>
                                 </div>

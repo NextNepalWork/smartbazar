@@ -21,9 +21,9 @@ use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
-       public function index(Request $request)
+    public function index(Request $request)
     {
-        
+
         if ($request->ajax()) {
 
             if (Session::has('times')) {
@@ -48,7 +48,7 @@ class HomeController extends Controller
             }
 
             $products = Product::where('status', '=', 'published')
-                        ->where('approved', 1)->latest()->take(12)->get();
+                ->where('approved', 1)->latest()->take(12)->get();
             Session::put('times', 1);
             return view('front.reloadmore', compact('products'));
 
@@ -58,12 +58,12 @@ class HomeController extends Controller
         $brands = Brand::where('status', 1)->take('10')->get();
         $seos = Seo::where('status', 1)->get();
         $advertises = Advertise::where('status', 2)->take(10)->get();
-        $mall = VendorDetail::where('verified',1)->get();
+        $mall = VendorDetail::where('verified', 1)->get();
         $superstore = Product::where('status', '=', 'published')
             ->where('approved', 1)->where('super_store_status', 1)->latest()->get();
-        $deals = Deal::whereHas('products')->with('products')->orderBy('id','desc')->get();
+        $deals = Deal::whereHas('products')->with('products')->orderBy('id', 'desc')->get();
         //dd($mall->first()->image);
-        return view('front.index', compact('slideshows', 'brands', 'seos', 'advertises', 'mall', 'superstore','deals'));
+        return view('front.index', compact('slideshows', 'brands', 'seos', 'advertises', 'mall', 'superstore', 'deals'));
     }
 
 

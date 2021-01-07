@@ -49,7 +49,7 @@ class CommissionController extends Controller
     public function update(Request $request)
     {
         $this->validate($request, [
-            'commission' => 'required|numeric'
+            'commission' => 'numeric'
         ]);
 
         Commission::updateOrCreate(['user_id' => $request->vendor_id], ['commission' => $request->commission]);
