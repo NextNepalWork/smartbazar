@@ -40,18 +40,20 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function redirectToProvider( $provider ) {
+    public function redirectToProvider($provider)
+    {
 
-        return Socialite::driver( $provider )->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
-    public function handleProviderCallback( $provider ) {
-      
+    public function handleProviderCallback($provider)
+    {
+
         try {
-            if ( $provider != 'facebook' ) {
-                $user = Socialite::driver( $provider )->user();
+            if ($provider != 'facebook') {
+                $user = Socialite::driver($provider)->user();
             } else {
-                $user = Socialite::driver( $provider )->fields(
+                $user = Socialite::driver($provider)->fields(
                     [
                         'id',
                         'name',
@@ -62,55 +64,62 @@ class LoginController extends Controller
                 )->user();
             }
 
-        } catch ( \Exception $e ) {
-            return redirect()->to( '/login' );
+        } catch (\Exception $e) {
+            return redirect()->to('/login');
         }
 
-        $authUser = $this->findOrCreateUser( $user, $provider );
+        $authUser = $this->findOrCreateUser($user, $provider);
 
-        if ($authUser->verified != 1){
-            return redirect()->to( 'vertification' );
+        if ($authUser->verified != 1) {
+            return redirect()->to('vertification');
 
-        }
-        else
-            auth()->login( $authUser, true );
+        } else
+            auth()->login($authUser, true);
 
-        return redirect()->to( '/' );
+        return redirect()->to('/');
     }
 
-    private function findOrCreateUser( $socialLiteUser, $key ) {
+    private function findOrCreateUser($socialLiteUser, $key)
+    {
         $email = $key != 'facebook' ? $socialLiteUser->email : $socialLiteUser->user['email'];
 
-        if ( $authUser = User::where( 'email', $email )->first() ) {
+        if ($authUser = User::where('email', $email)->first()) {
             return $authUser;
         }
 // dd($socialLiteUser);
 
-        return User::create( [
-            'first_name'  => $key != 'facebook' ? $socialLiteUser->user['name'] : $socialLiteUser->user['first_name'],
-            'last_name'   => $key != 'facebook' ?$socialLiteUser->user['family_name'] : $socialLiteUser->user['last_name'],
-            'email'       => $key != 'facebook' ? $socialLiteUser->email : $socialLiteUser->user['email'],
-            'password'    => bcrypt( str_random( 10 ) ),
-            'provider'    => $key,
+        return User::create([
+            'first_name' => $key != 'facebook' ? $socialLiteUser->user['name'] : $socialLiteUser->user['first_name'],
+            'last_name' => $key != 'facebook' ? $socialLiteUser->user['family_name'] : $socialLiteUser->user['last_name'],
+            'email' => $key != 'facebook' ? $socialLiteUser->email : $socialLiteUser->user['email'],
+            'password' => bcrypt(str_random(10)),
+            'provider' => $key,
             'remember_token' => base64_encode($key != 'facebook' ? $socialLiteUser->email : $socialLiteUser->user['email']),
-            'verified'    => 1,
+            'verified' => 1,
             'provider_id' => $key != 'facebook' ? $socialLiteUser->id : $socialLiteUser->user['id'],
-            'user_name'   => $key != 'facebook' ? $socialLiteUser->name : $socialLiteUser->user['name'],
-        ] );
+            'user_name' => $key != 'facebook' ? $socialLiteUser->name : $socialLiteUser->user['name'],
+        ]);
 
     }
 
+    // public function showLoginForm()
+    // {
+    //     if (!session()->has('url.intended')) {
+    //         session(['url.intended']);
+    //     }
+    //     return view('auth.login');
+    // }
+    
     protected function authenticated(Request $request, $user)
     {
-        if ( $user->hasRole('admin') ) {
+        if ($user->hasRole('admin')) {
             return redirect()->route('admin.index');
-        }
-        elseif ( $user->hasRole('vendor') ) {
-            return redirect()->route('vendor.dashboard');
-        }
-        else {
+        } elseif ($user->hasRole('vendor')) {
             return redirect()->route('user.account');
+        } else {
+            return redirect()->intended();
         }
+
     }
 
 

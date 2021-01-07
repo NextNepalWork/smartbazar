@@ -17,7 +17,7 @@
 
 
 
-        /*.product-category.white-product .product {
+        /* .product-category.white-product .product {
 
         }
 
@@ -50,7 +50,7 @@
 
         .product-category.white-product .product:hover .product_wrap_overlay span .far {
             color: #fff;
-        }*/
+        } */
     </style>
 
 @endsection
@@ -195,9 +195,9 @@
                                                         </div>
                                                     </div>
 
-                                                    {{--<div class="product_wrap_overlay">
-                                                        <span><i class="far fa-eye"></i></span>
-                                                    </div>--}}
+                                                    {{-- <div class="product_wrap_overlay">
+                                                        <a href="javascript:;" class="btn-quickview" data-id="{{ $product->id }}"><span><i class="far fa-eye"></i></span></a>
+                                                    </div> --}}
                                                 </div>
                                             </article>
 
@@ -930,6 +930,7 @@
 
 
     </div>
+    <div id="quickview-modal" class="product-description uk-modal"></div>
 
 
 @endsection

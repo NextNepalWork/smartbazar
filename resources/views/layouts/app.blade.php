@@ -690,12 +690,14 @@
     var $modal = $('#quickview-modal');
 
     $(document).on("click", ".btn-quickview", function (e) {
-        e.preventDefault();
+       e.preventDefault();
         var $this = $(this);
-        var id = $this.attr('data-product-id');
+        var id = $this.data('id');
+        // console.log(id);
         var tempEditUrl = "{{ route('quick.view', ':id') }}";
         tempEditUrl = tempEditUrl.replace(':id', id);
         $modal.load(tempEditUrl, function (response) {
+        // console.log(response);
         });
     });
 
