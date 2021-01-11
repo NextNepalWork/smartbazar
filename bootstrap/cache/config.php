@@ -494,8 +494,8 @@
       'name' => 'Example',
     ),
     'encryption' => 'tls',
-    'username' => '3e9620d159e3df',
-    'password' => 'b085ac3beeaa11',
+    'username' => '9c860a0a3ee637',
+    'password' => 'e23200ee8e4400',
     'sendmail' => '/usr/sbin/sendmail -bs',
     'markdown' => 
     array (

@@ -148,7 +148,8 @@
                                                 </div>
                                             </div>
 											<div class="col-xs-9">
-                                                <h3>Your Selected Category: <span style="color: red"> <input type="text" value="{{ $product->categories ? $product->categories->first()->name : '' }}" id="category_name" class="product--hidden-category" readonly/></span></h3>
+                                                <h3>Your Selected Category: <span style="color: red"> <input type="text" value="{{ $product->categories->isNotEmpty() ? $product->categories->first()->name : '' }}" 
+                                                    id="category_name" class="product--hidden-category" readonly/></span></h3>
                                                 
 
                                                 <hr>
@@ -458,9 +459,9 @@
                                                 <input type="text" class="form-control" name="name"
                                                        placeholder="Product title" value="{{ $product->name }}">
                                             </div>
-                                            <div class="col-md-5">
+                                            {{-- <div class="col-md-5">
                                                 <input type="number" name="commission" min="0" class="form-control" placeholder="Enter Owner Commission for this product" value="{{ $product->commission }}">
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-md-6 sale--inline">

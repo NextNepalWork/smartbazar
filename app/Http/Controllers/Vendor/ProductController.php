@@ -129,9 +129,12 @@ class ProductController extends Controller
 
     public function delete($id)
     {
-        $this->productRepository->deleteProduct($id);
         $product = Product::findOrFail($id);
-        $product->status= 'deleted';
+        $product->update([
+            'status' => 'deleted'
+        ]);
+        $this->productRepository->deleteProduct($id);
+        // $product->status= 'deleted';
         $product->save();
 
         return redirect()->back()->with('success', 'Product Successfully Deleted.');
