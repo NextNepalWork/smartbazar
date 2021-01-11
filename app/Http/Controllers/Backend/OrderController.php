@@ -49,6 +49,7 @@ class OrderController extends Controller
         $orderCompletedCount = Order::where('order_status_id', 8)->count();
 
         $prebookings = Order::whereHas('prebookings')->with('prebookings')->orderBy('id', 'desc')->get();
+        // dd($prebookings);
 
         // if ($ordersCount == 0) {
         //     return view('admin.orders.index2', compact('ordersCount'));

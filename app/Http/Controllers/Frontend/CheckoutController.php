@@ -49,6 +49,7 @@ class CheckoutController extends Controller
         $shipping = ShippingAccount::where('user_id', auth()->id())->where('is_default', 1)->first();
         $shipping_places = ShippingAmount::all();
         $paymentMethod = PaymentMethod::all();
+        // dd($paymentMethod);
         return view('front.checkout.checkout', compact('shipping', 'shipping_places', 'paymentMethod'));
     }
 
@@ -66,6 +67,7 @@ class CheckoutController extends Controller
             'zone' => 'required',
             'mobile' => 'required|min:9|max:15',
         ]);
+        // dd($request->all());
 
         $ship_location = ShippingAmount::where('place', $request->shipping_address)->first();
 
@@ -77,6 +79,7 @@ class CheckoutController extends Controller
             if (isset($cartContents) && $cartContents->isEmpty()) {
                 return redirect()->back()->with('error', 'There is no item in your cart');
             }
+
             $order = $this->orderRepository->store($request->all());
             $code = $order->code;
         } catch (\Exception $e) {
@@ -98,8 +101,8 @@ class CheckoutController extends Controller
                 'status' => $order->order_status_id,
                 'amount' => $referral
             ]);
-//            $referred_amount = VendorWallet::where('super_vendor_id', $super_vendor_id)->first()->total_amount;
-//            VendorWallet::where('super_vendor_id', $super_vendor_id)->update(['total_amount' => $referred_amount + $referral]);
+            //            $referred_amount = VendorWallet::where('super_vendor_id', $super_vendor_id)->first()->total_amount;
+            //            VendorWallet::where('super_vendor_id', $super_vendor_id)->update(['total_amount' => $referred_amount + $referral]);
         }
         if (Session::has('super_customer_referral') && Session::has('super_customer_id')) {
             $super_customer_id = Session::get('super_customer_id');
@@ -111,8 +114,12 @@ class CheckoutController extends Controller
                 'amount' => $referral
             ]);
         }
+        // $total_amount = $request->total_amount;
+        // if ($order->payment_method_id == 1) {
+        //     return view('front.checkout.order_status', compact('total_amount', 'order'));
+        // }
 
-        \Mail::to($request->email)->send(new OrderSent($data2));
+        // \Mail::to($request->email)->send(new OrderSent($data2));
         Session::flash('order', 'Saved!');
         return view('front.checkout.order_status', compact('code'));
     }
@@ -166,8 +173,6 @@ class CheckoutController extends Controller
                 Session::put('super_vendor_id', $super_vendor_id);
                 Session::put('referral', $referral);
             }
-
-
         }
         if (Session::has('super_customer_link_id')) {
 
@@ -180,8 +185,6 @@ class CheckoutController extends Controller
                 Session::put('super_customer_id', $super_customer_id);
                 Session::put('super_customer_referral', $referral);
             }
-
-
         }
 
 
@@ -229,5 +232,4 @@ class CheckoutController extends Controller
         Session::flash('order', 'Saved!');
         return view('front.checkout.order_status', compact('code'));
     }
-
 }

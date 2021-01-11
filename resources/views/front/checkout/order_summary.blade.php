@@ -10,10 +10,10 @@
                     <ul class=" payment_methods liststyle--none uk-margin-bottom">
                         <li class="payment_method payment_method_ebanks">
                             <input id="payment_method_ebanks" type="radio" class="uk-radio input-radio"
-                                   name="payment_method" value="ebanks" checked="checked">
+                                   name="payment_method_id" value="not_made now" checked="checked">
                             <label for="payment_method_ebanks">Direct bank transfer </label>
 
-                            <div class="payment_box payment_method_banks">
+                            {{-- <div class="payment_box payment_method_banks">
 
                                 @foreach($paymentMethod as $payment)
                                
@@ -30,12 +30,12 @@
                                         </label>
                                     </div>
                                 @endforeach
-                            </div>
+                            </div> --}}
                         </li>
 
                          <li class="payment_method payment_method_cod">
                             <input id="payment_method_cod" type="radio" class="uk-radio input-radio"
-                                   name="payment_method_id" value="5">
+                                   name="payment_method_id" value="2">
 
                             <label for="payment_method_cod">Cash on delivery </label>
                             <div class="payment_box payment_method_cod" style="display:none;">
@@ -174,6 +174,7 @@
                                         </tr>
                                         </tfoot>
                                     </table>
+
                                 </div>
                                 <p class="terms-and-conditions">
                                     <label class="form__label-for-checkbox">
@@ -189,6 +190,7 @@
                             </div>
                         </div>
                     </div>
+                    <input type="hidden" name="total_amount" id="ship_amnt_total" value="{{ session()->exists('coupon') ? number_format($grandTotal - session()->get('coupon')['discount_value'], 2) : number_format($grandTotal, 2) }}">
                     <input type="submit" value="Confirm Order" class="btn btn-primary" id="confirmation_term" disabled>
                 </div>
             </div>
