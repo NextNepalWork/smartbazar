@@ -138,7 +138,7 @@ class HomeController extends Controller
             'email_token' => $user->token
         ];
 
-        \Mail::to($user->email)->send(new EmailVerification($data));
+        Mail::to($user->email)->send(new EmailVerification($data));
 
         return redirect()->back()->with('success', 'Email is successfully sent. Please check your inbox!');
     }

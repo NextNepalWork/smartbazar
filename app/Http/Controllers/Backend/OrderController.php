@@ -276,7 +276,7 @@ class OrderController extends Controller
             ->select('users.id as user_id', 'users.first_name as user_first_name', 'users.last_name as user_last_name', 'shipping_accounts.*')
             ->first();
 
-        return view('admin.orders.invoice', compact('order', 'userDetails', 'state'));
+        return view('admin.orders.invoice', compact('order', 'userDetails'));
     }
 
     public function generatePreInvoice($id)
@@ -552,7 +552,7 @@ class OrderController extends Controller
         $ordercode->setFontSize(8);
         $order_code = $ordercode->generate();
 
-        return view('admin.orders.barcode', compact('order', 'userDetails', 'state', 'code', 'qrLogo', 'order_code'));
+        return view('admin.orders.barcode', compact('order', 'userDetails', 'code', 'qrLogo', 'order_code'));
     }
 
     public function exportToExcel()

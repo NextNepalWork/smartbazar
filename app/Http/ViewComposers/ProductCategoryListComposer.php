@@ -28,7 +28,7 @@ class ProductCategoryListComposer {
 		$categories = $this->category->getCategories()->take(12);
 
 		//$categories = Category::take(12)->get();
-		// $categories = null;
+		//  $categories = null;
 		$payments = PaymentMethod::all();
 		$view->with( 'productCategories', $categories )
         ->with( 'payments', $payments );

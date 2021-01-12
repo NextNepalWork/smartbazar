@@ -3,15 +3,16 @@
 
         <div class="col-md-4">
             <div class="payment-method__container box-shadow">
-                <h4 style="background: #f1f1f1;padding: 15px;color: black;margin: 0;">
+                <h4 style="background: #f1f1f1;padding: 15px;color: black;margin: 0 0 10px 0;">
                     Payment method
                 </h4>
-                <div id="payment" class="checkout-payment">
+                <div id="payment" class="checkout-payment" style="padding: 5px 10px 0;">
                     <ul class=" payment_methods liststyle--none uk-margin-bottom">
-                        <li class="payment_method payment_method_ebanks">
+                        <li class="payment_method payment_method_ebanks mb-2">
                             <input id="payment_method_ebanks" type="radio" class="uk-radio input-radio"
-                                   name="payment_method_id" value="not_made now" checked="checked">
-                            <label for="payment_method_ebanks">Direct bank transfer </label>
+                                   name="payment_method_id" value="2" checked="checked"
+                                   style="transform:scale(1.5);margin-right:5px;">
+                            <label for="payment_method_ebanks">Cash On Delivery</label>
 
                             {{-- <div class="payment_box payment_method_banks">
 
@@ -35,12 +36,12 @@
 
                          <li class="payment_method payment_method_cod">
                             <input id="payment_method_cod" type="radio" class="uk-radio input-radio"
-                                   name="payment_method_id" value="2">
+                                   name="payment_method_id" value="1" style="transform:scale(1.5);margin-right:5px;" disabled>
 
-                            <label for="payment_method_cod">Cash on delivery </label>
-                            <div class="payment_box payment_method_cod" style="display:none;">
+                            <label for="payment_method_cod">E-Sewa</label>
+                            {{-- <div class="payment_box payment_method_cod" style="display:none;">
                                 <p>Pay with cash upon delivery.</p>
-                            </div>
+                            </div> --}}
                         </li> 
                     </ul>
                 </div>

@@ -39,7 +39,7 @@
 							
 							<td>abc</td>
 							<td>{{ $withdraw->amount }}</td>
-							<td>{{ isset(\App\User::where('id',$withdraw->vendor_id)->first()->phone)?isset(\App\User::where('id',$withdraw->vendor_id)->first()->phone):'' }}</td>
+							<td>{{ isset(\App\User::where('id',$withdraw->vendor_id)->first()->phone)? (\App\User::where('id',$withdraw->vendor_id)->first()->phone):'' }}</td>
 							<td>{{ $withdraw->method }}</td>
 
 							<td>
@@ -49,7 +49,7 @@
 									<button class="btn btn-danger btn-xs withdraw-verify" data-id="{{$withdraw->id}}">Non-Verify</button>
 								@endif
 							</td>
-							<td><span class="label label-{{ $status }}">{{ $status }}</span></td>
+							<td><span class="label label-{{ $status }}">{{ ($status == 'success') ? 'Success' : 'Pending'}}</span></td>
 							<td>{{ $withdraw->created_at->diffForHumans() }}</td>
 							<td>
 								<div style="display: flex;justify-content: space-between;align-items: center;">

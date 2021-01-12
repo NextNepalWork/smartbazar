@@ -96,6 +96,10 @@ class EloquentOrderRepository extends AbstractRepository implements OrderReposit
         if (session()->exists('coupon')) {
             session()->forget('coupon');
         }
+        // if ($order->payment_method_id == 2) {
+
+        //     Cart::destroy();
+        // }
         Cart::destroy();
         return $order;
     }

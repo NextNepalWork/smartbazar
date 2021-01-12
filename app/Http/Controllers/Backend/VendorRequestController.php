@@ -52,7 +52,7 @@ class VendorRequestController extends Controller
             'name' => $request->name,
             'status' => 'Accepted'
         ];
-        // Mail::to($request->primary_email)->send(new VendorRequest($data));
+        Mail::to($request->primary_email)->send(new VendorRequest($data));
         return redirect()->back()->with('success', 'Status Changed SucessFully');
 
     }
@@ -64,7 +64,7 @@ class VendorRequestController extends Controller
             'name' => $request->name,
             'status' => 'Rejected'
         ];
-        // Mail::to($request->primary_email)->send(new VendorRequest($data));
+        Mail::to($request->primary_email)->send(new VendorRequest($data));
         return redirect()->back()->with('success', 'Status Changed SucessFully');
     }
 

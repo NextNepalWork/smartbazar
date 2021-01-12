@@ -286,17 +286,16 @@
                         </div>
                         <ul class="user-wishlist relative">
                             @if(\Illuminate\Support\Facades\Auth::check())
-
-                                <li><a href="javascript:void(0)" class="user-wishlist-link px-3 d-block ">
+                                <li><a href="{{ route('wishlist.mywishlist') }}" class="user-wishlist-link px-3 d-block " title="View Wishlist">
                                         <span class="font-weight-bold" style="font-size: 24px"> 
                                          <i class="heart d-block" style="width:30px; height:30px;"
                                             uk-icon="icon:heart; ratio: 1.5"></i>
                                         </span>
                                     </a>
                                 </li>
-                                <div class="cart-count">
-                                    <span>1</span>
-                                </div>
+                                {{-- <div class="cart-count">
+                                    <span></span>
+                                </div> --}}
                             @endif
                         </ul>
 

@@ -440,8 +440,9 @@ class VendorController extends Controller
     }
 
     public function getWithdrawRequest()
-    {
-
+    {   
+        $vendor_id = auth()->id();
+        $details = WithDraw::where('vendor_id', $vendor_id)->get();
         return view('merchant.withdraw.create', compact('details'));
     }
 
@@ -452,7 +453,7 @@ class VendorController extends Controller
         $withdraw = new WithDraw;
 
         $withdraw->vendor_id = auth()->id();
-        $withdraw->method = $request->method();
+        $withdraw->method = $request->method;
         $withdraw->amount = $request->amount;
         $withdraw->approve = $request->approve;
         $withdraw->email = $request->email;

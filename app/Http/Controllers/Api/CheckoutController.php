@@ -140,7 +140,7 @@ class CheckoutController extends Controller
 
         ];
 
-        // \Mail::to(Auth::User()->email)->send(new OrderSent($data2));
+        Mail::to(Auth::User()->email)->send(new OrderSent($data2));
 
         return response()->json(['success' => 'Order successfully placed!'], 201);
     }

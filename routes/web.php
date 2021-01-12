@@ -34,6 +34,10 @@ Route::get('fail', 'Vendor\VendorController@fail')->name('sell.fail');
 Route::get('success', 'Vendor\VendorController@success')->name('sell.success');
 
 
+Route::get('payment/success', 'PaymentController@success')->name('checkout.success')->middleware('auth');
+Route::get('payment/fail', 'PaymentController@fail')->name('checkout.fail')->middleware('auth');
+
+
 Route::get('/mission-vision', 'PageController@getMission')->name('mission');
 Route::get('/payments', 'PageController@getPayments')->name('payments');
 Route::get('/about-shipping', 'PageController@getShipping')->name('shipping');

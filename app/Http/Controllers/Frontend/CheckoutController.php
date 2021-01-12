@@ -67,14 +67,15 @@ class CheckoutController extends Controller
             'zone' => 'required',
             'mobile' => 'required|min:9|max:15',
         ]);
-        // dd($request->all());
 
         $ship_location = ShippingAmount::where('place', $request->shipping_address)->first();
 
         if ($ship_location == null) {
             return redirect()->back()->with('error', 'Invalid location !');
         }
+
         $cartContents = Cart::content();
+    
         try {
             if (isset($cartContents) && $cartContents->isEmpty()) {
                 return redirect()->back()->with('error', 'There is no item in your cart');
@@ -114,12 +115,14 @@ class CheckoutController extends Controller
                 'amount' => $referral
             ]);
         }
-        // $total_amount = $request->total_amount;
-        // if ($order->payment_method_id == 1) {
-        //     return view('front.checkout.order_status', compact('total_amount', 'order'));
-        // }
 
-        // \Mail::to($request->email)->send(new OrderSent($data2));
+        \Mail::to($request->email)->send(new OrderSent($data2));
+        
+        $total_amount = $request->total_amount;
+        if ($order->payment_method_id == 1) {
+
+            return view('front.checkout.checkout_payment', compact('total_amount', 'code'));
+        }
         Session::flash('order', 'Saved!');
         return view('front.checkout.order_status', compact('code'));
     }
