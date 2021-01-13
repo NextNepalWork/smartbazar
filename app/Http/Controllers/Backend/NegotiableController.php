@@ -17,9 +17,10 @@ class NegotiableController extends Controller
      */
     public function index()
     {
- $negotiables = Negotaible::wherehas('product', function ($query) {
-            $query->where('products.user_id', Auth::user()->id);
-        })->get();
+        $negotiables = Negotaible::where('user_id','!=',Auth::user()->id)->orderBy('id','DESC')->get();
+        // $negotiables = Negotaible::wherehas('product', function ($query) {
+        //     $query->where('products.user_id', Auth::user()->id);
+        // })->get();
         return view('admin.negotiable.negotiable', compact('negotiables'));
     }
 
@@ -43,8 +44,6 @@ class NegotiableController extends Controller
         if ($priceUpdate) {
             return redirect()->back()->with('success', 'Price Sucessfully Update');
         }
-
-
     }
 
     /**

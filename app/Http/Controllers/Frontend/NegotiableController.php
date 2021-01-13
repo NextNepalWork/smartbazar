@@ -25,14 +25,14 @@ class NegotiableController extends Controller
 
         $negotiable = Negotaible::where('id', $id)->first();
         $last = NegotiablePrice::where('negotiable_id', $negotiable->id)->where('user_id', auth()->id())->orderBy('id', 'DESC')->first();
+
         if (!empty($last)) {
             $last_date = Carbon::parse($last->updated_at);
             $result = $last_date->diffInDays(Carbon::now(), false);
         }
+        $result = null;
 
         return view('front.my_account.negotiate', compact('negotiable', 'result'));
-
-
     }
 
     /**
@@ -42,16 +42,14 @@ class NegotiableController extends Controller
      */
     public function create(Request $request)
     {
-//        $validator = Validator::make($request->all(), [
-//            'bargain_price' => 'required|numeric'
-//        ])->validate();
+        //        $validator = Validator::make($request->all(), [
+        //            'bargain_price' => 'required|numeric'
+        //        ])->validate();
 
         $product_id = $request->product_id;
         $nego_product = Negotaible::where('product_id', $product_id)->where('user_id', auth()->id())->first();
         if ($nego_product) {
-                     return redirect()->route('negotiate.chat', $nego_product->id)->with('success', 'Negotiable has already been added before');
-
-
+            return redirect()->route('negotiate.chat', $nego_product->id)->with('success', 'Negotiable has already been added before');
         }
         $new = new Negotaible();
         $new->product_id = $product_id;
@@ -60,10 +58,8 @@ class NegotiableController extends Controller
         if ($new->save()) {
 
             return redirect()->route('negotiate.chat', $new->id)->with('success', 'Negotiable has been Added');
-
         }
         return false;
-
     }
 
     /**
@@ -91,7 +87,7 @@ class NegotiableController extends Controller
             'active' => 1
         ]);
 
-//        $negotiable1 = DisputeMessage::where('dispute_id',$dispute->id)->get();
+        //        $negotiable1 = DisputeMessage::where('dispute_id',$dispute->id)->get();
 
 
         return redirect()->back()->with('success', 'Message Sucessfully Sent');
@@ -119,7 +115,6 @@ class NegotiableController extends Controller
     public function edit($id)
     {
         dd('edit');
-
     }
 
     public function reload(Request $request)
@@ -128,20 +123,20 @@ class NegotiableController extends Controller
 
 
         $negotiate_product = NegotiablePrice::where('negotiable_id', $request->id)->where('active', 1)->first();
-//        foreach($dispute as $row) {
-//            $row->active = 0;
-//            $row->save();
-//        }
+        //        foreach($dispute as $row) {
+        //            $row->active = 0;
+        //            $row->save();
+        //        }
         dd($negotiate_product);
         return view('front.my_account.reload', compact('negotiate_product'));
-//        if(Auth::user()->hasRole(['admin','vendor']))
-//        {
-//            return view('admin.disputes.reload', compact('dispute'));
-//        }
-//        else
-//        {
-//            return view('front.disputes.reload', compact('dispute'));
-//        }
+        //        if(Auth::user()->hasRole(['admin','vendor']))
+        //        {
+        //            return view('admin.disputes.reload', compact('dispute'));
+        //        }
+        //        else
+        //        {
+        //            return view('front.disputes.reload', compact('dispute'));
+        //        }
     }
 
 
@@ -175,8 +170,8 @@ class NegotiableController extends Controller
     public function checkout($id)
     {
         $neg = Negotaible::findorfail($id);
-        $product_id=$neg->product_id;
-        $product_name= Product::findorfail($product_id)->name;
+        $product_id = $neg->product_id;
+        $product_name = Product::findorfail($product_id)->name;
         if ($neg->user_id == auth()->id() && $neg->fixed_price) {
             Cart::add([
                 'id' => $product_id,
@@ -186,15 +181,10 @@ class NegotiableController extends Controller
 
 
             ]);
-//            dd(Cart::content());
+            //            dd(Cart::content());
             return redirect()->route('checkout');
-
         } else {
             return redirect()->back();
         }
-
     }
-
-
-
 }

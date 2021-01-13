@@ -47,8 +47,8 @@
 
                             <td>
 
-                                <a class="btn btn-default request"
-                                   @if($negotiable->fixed_price ==null) disabled @endif>Checkout</a>
+                                <a class="btn btn-default request {{ ($negotiable->fixed_price ==null) ? 'disabled' : ''}}" href="{{ url('/negoiate/checkout/'.$negotiable->id) }}"
+                                   >Checkout</a>
 
 
                             </td>

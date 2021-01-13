@@ -64,7 +64,7 @@ Route::group(['namespace' => 'Frontend',], function () {
 
 
     Route::get('/category/{slug}', 'CategoryController@getCategoryProducts')->name('category');
-//  Route::post( '/category/{slug}', 'CategoryController@filter' )->name( 'filter' );
+    //  Route::post( '/category/{slug}', 'CategoryController@filter' )->name( 'filter' );
 
     Route::get('/brand/{slug}', 'BrandController@getBrandProducts')->name('brand');
     Route::get('/deal/{slug}', 'BrandController@getDealProducts')->name('deal');
@@ -92,7 +92,7 @@ Route::group(['namespace' => 'Frontend',], function () {
     Route::get('/quickview/{id}', 'HomeController@quickView')->name('quick.view');
 
 
-//    Service
+    //    Service
 
     Route::get('/services', 'ServiceController@index')->name('services.index');
 
@@ -105,8 +105,6 @@ Route::group(['namespace' => 'Frontend',], function () {
     Route::get('user/services/{id}', 'ServiceController@destroy')->name('service.delete');
 
     Route::post('/service/request', 'ServiceController@store')->name('service.request');
-
-
 });
 
 Route::get('/contact-us/create', 'ContactController@getCreate')->name('contact.create');
@@ -191,14 +189,14 @@ Route::group(['middleware' => 'auth', 'namespace' => 'Frontend'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Backend', 'middleware' => 'role:admin|manager|editor|delivery'], function () {
-//Dashboard
+        //Dashboard
         Route::get('/', 'DashboardController@index')->name('index');
         //Ads
         Route::get('/ads', 'DashboardController@getAds')->name('ads.all');
         Route::get('/ads/edit/{id}', 'DashboardController@getEdit')->name('ads.edit');
         Route::post('/ads/update/{id}', 'DashboardController@editAds')->name('ads.update');
 
-//Admin Services Route
+        //Admin Services Route
         Route::get('/services', 'ServiceController@index')->name('services');
         Route::get('/services/create', 'ServiceController@create')->name('services.create');
         Route::post('/services/store', 'ServiceController@store')->name('services.store');
@@ -217,7 +215,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/provider/Reviews/', 'ServiceProviderController@prodiverRatingIndex')->name('provider.rating.index');
 
 
-//    Services Category
+        //Services Category
 
         Route::get('/service-category', 'ServiceCategoryController@index')->name('service.category');
         Route::post('/service-category/store', 'ServiceCategoryController@store')->name('service.category.store');
@@ -226,16 +224,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/service-category/update', 'ServiceCategoryController@update')->name('service.category.update');
 
         Route::get('/service-categoryjson', 'ServiceCategoryController@getServiceCategoryJson')->name('service_categories.json');
-//review
+        //review
         Route::get('/reviews', 'ReviewController@index')->name('reviews.index');
         Route::get('/reviews/json', 'ReviewController@getReviewJson')->name('review.json');
         Route::post('/review/status/{id}', 'ReviewController@updateStatus')->name('review.status');
 
         Route::get('/review/delete/{id}', 'ReviewController@destroy')->name('review.delete');
 
-//Pgaes
+        //Pgaes
         Route::resource('page', 'PageController', ['except' => ['show']]);
         Route::get('/get-pages', 'PageController@getPagesJson')->name('pages.json');
+
         //Vendor Request
         Route::get('vendor/request', 'VendorRequestController@index')->name('vendor.request');
         Route::put('vendor/request/status/{id}', 'VendorRequestController@change_status')->name('vendor.request.status');
@@ -249,7 +248,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('vendor/SuperCustomer_commissions', 'VendorRequestController@SuperCustomer_commissions')->name('vendor.SuperCustomer_commissions');
         Route::any('vendor/SuperCustomer_referrals', 'VendorRequestController@SuperCustomer_referrals')->name('vendor.SuperCustomer_referrals');
 
-//        payment
+        //payment
 
         Route::get('/paymentmethod', 'PaymentMethodController@index')->name('payment.index');
         Route::post('/paymentmethod/Store', 'PaymentMethodController@store')->name('payment.store');
@@ -272,7 +271,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/vendor/review/status/{id}', 'VendorReviewController@updateStatus')->name('vendor.review.status');
 
         Route::get('/vendor/review/delete/{id}', 'VendorReviewController@destroy')->name('vendor.review.delete');
-//Category
+        //Category
         Route::get('category', 'CategoryController@index')->name('category');
         Route::get('category/add', 'CategoryController@create')->name('category.add');
         Route::post('category/store', 'CategoryController@store')->name('category.store');
@@ -302,7 +301,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/teams/json', 'TeamController@getTeamJson')->name('teams.json');
 
 
-//SlideShow
+        //SlideShow
         Route::get('/slideshows', 'SlideshowController@index')->name('slideshow.index');
         Route::post('slideshow/store', 'SlideshowController@store')->name('slideshow.store');
         Route::get('/slideshow/json', 'SlideshowController@getSlideshowJson')->name('slideshow.json');
@@ -312,7 +311,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/slideshow/update/{id}', 'SlideshowController@update')->name('slideshow.update');
 
 
-//Forum
+        //Forum
         Route::get('questions', 'Forumcontroller@index')->name('question.index');
         Route::post('question/store', 'ForumController@create')->name('question.store');
         Route::post('answer/store/{id}', 'AnswerController@answerStore')->name('answer.store');
@@ -320,7 +319,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/question/add', 'ForumController@index')->name('question.add');
         Route::get('/question/{id}', 'ForumController@getForum')->name('question');
 
-//Testimional
+        //Testimional
         Route::get('/testimonials', 'TestimonialController@index')->name('testimonials.index');
         Route::get('/testimonials/create', 'TestimonialController@create')->name('testimonials.create');
         Route::post('/testimonials/store', 'TestimonialController@store')->name('testimonials.store');
@@ -519,7 +518,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'reports'], function () {
             Route::get('/reports-tax', 'ReportController@tax_report')->name('reports.tax');
         });
-
     });
     Route::group(['prefix' => 'vendors', 'as' => 'vendor.', 'namespace' => 'Vendor', 'middleware' => 'role:vendor|admin|Super-Vendor|Regional-Manager'], function () {
         Route::get('/products/delete/{id}', 'ProductController@delete')->name('products.delete');
@@ -658,8 +656,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/negotiable/update/{id}', 'NegotiableController@priceUpdate')->name('negotiable.price');
         Route::post('/fix-price', 'NegotiableController@fix_price')->name('negotiable.fix_price');
         Route::post('/negotiable/{id}', 'NegotiableController@store')->name('negotiable.store');
-
-
     });
 
     Route::delete('/advertise/delete/{id}', 'Vendor\AdvertiseController@destroy')->name('vendor.advertise.destroy');

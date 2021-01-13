@@ -398,7 +398,7 @@
                                     <section id="shopping-cart">
                                         <div class="container box-shadow mt-2 mb">
                                             <div class="heading text-center mb">
-                                                <h3>Wish list </h3>
+                                                <h3>Negotiation list </h3>
                                             </div>
 
                                             <div class="table-responsive">
