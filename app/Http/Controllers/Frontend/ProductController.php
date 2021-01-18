@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Model\NotifyInstock;
+use App\Model\Order;
 use App\Model\Product;
 use App\Model\ProductRelation;
 use App\Model\Referral;
@@ -39,10 +40,15 @@ class ProductController extends Controller
             $relation = $product->relation ? $product->relation->product_id : $product->id;
             $relation_ids = ProductRelation::where('product_id', $relation)->pluck('relation_id')->toArray();
             $products = Product::whereIn('id', $relation_ids)->where('status','published')->where('approved',1)->get();
+            $vendor_detail = VendorDetail::where('user_id', $product->user_id)->first();
+            $vendor_products_count = Product::where('user_id',$vendor_detail->user_id)->get()->count();
+            $vendor_orders_count = Order::where('user_id',$vendor_detail->user_id)->get()->count();
+            // dd($vendor_products);
 
             $recentlyViewedProducts = Product::orderby( 'updated_at', 'DESC' )->where('status','published')->where('approved',1)->take( 20 )->get();
 
-            return view('front.single_page',compact('product','sizes','colours','shop_name','wishlist','relatedProducts', 'products', 'recentlyViewedProducts'));
+            return view('front.single_page',compact('product','sizes','colours','shop_name','wishlist','relatedProducts', 'products', 'recentlyViewedProducts','vendor_products_count'
+            ,'vendor_orders_count'));
 
         }
         else{

@@ -28,9 +28,10 @@
 						<label for="">Withdraw Amount*</label>
 						<div class="input-group">
 							<div class="input-group-addon">Rs.</div>
-							<input type="text" class="form-control" name="amount" placeholder="Withdraw amount">
+							<input type="number" class="form-control" name="amount" min="0" max="{{ $current_balance }}" placeholder="Withdraw amount">
 							<div class="input-group-addon">.00</div>
 						</div>
+						<small id="amountHelp" class="form-text text-muted">Your Current Available Balance is: Rs. {{$current_balance}}</small>						
 					</div>
 					<div class="form-group">
 						<label for="">Withdraw Method*</label>

@@ -32,6 +32,8 @@
 
         function getOrderSummary() {
             var productsArray = [];
+                
+            var shipping_amount = $("select[name=shipping_amount").find(":selected").data('id');
 
             $('.table-order > tbody > tr.item').each(function (i, el) {
                 var product = $(el).attr('data-product');
@@ -40,7 +42,7 @@
                 var discount = $(el).find('.discount input').val();
                 var tax = $(el).find('.tax input').val();
 
-                var shipping_amount = $("select[name=shipping_amount]").find(":selected").val();
+                // var shipping_amount = $("input[name=shipping_amount]").val();
                 if(shipping_amount)
                 {
                     shipping_amount = shipping_amount;
@@ -60,6 +62,7 @@
                 });
 
             });
+            // console.log(productsArray);
 
             $.ajax({
                 type: "GET",
@@ -69,6 +72,7 @@
                 },
                 success: function (data) {
                     $('.table-order-summary tbody').html(data);
+                    $(".table-order-summary tbody").load(".table-order-summary tbody");
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                 },
@@ -121,6 +125,7 @@
                 },
                 success: function (data) {
                     $('div.address-details').html(data);
+                    // $("div.address-details").append("div.address-details");
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                 },
@@ -231,14 +236,17 @@
             var orderStatus = $("select[name=order_status]").find(":selected").val();
             var customer = $("select[name=customer]").find(":selected").val();
             var orderNote = $("textarea[name=order_note]").val();
-            var shipping_amount = $("select[name=shipping_amount]").find(":selected").val();
+            var shipping_addr = $("select[name=shipping_amount]").find(":selected").val();
+            var shipping_amount = $("select[name=shipping_amount]").find(":selected").data('id');
+
+            // console.log(shipping_addr);
 
             // Address details
             var firstName = $("input[name=first_name]").val();
             var lastName = $("input[name=last_name]").val();
             var email = $("input[name=email]").val();
             var mobile = $("input[name=mobile]").val();
-            var phone = $("input[name=phone]").val();
+            var country = $("input[name=country]").val();
             var area = $("input[name=area]").val();
             var district = $("input[name=district]").val();
             var zone = $("input[name=zone]").val();
@@ -266,6 +274,7 @@
 
 
             if (products.length > 0) {
+                // console.log(products);
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -281,11 +290,12 @@
                         customer: customer,
                         order_note: orderNote,
                         shipping_amount: shipping_amount,
+                        shipping_addr: shipping_addr,
                         first_name: firstName,
                         last_name: lastName,
                         email: email,
                         mobile: mobile,
-                        phone: phone,
+                        // phone: phone,
                         area: area,
                         district: district,
                         zone: zone,

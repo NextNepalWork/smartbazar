@@ -44,6 +44,16 @@ class UserController extends Controller
     	return view('vendors.index');
     }
 
+    public function searchUser(){
+        if(isset($_GET['q'])){
+            $q = $_GET['q'];
+            $data = User::query()
+            ->where('user_name', 'LIKE', "%{$q}%")->select('id','user_name as text')->get();
+        }
+        return $data;
+
+    }
+
 //    public function storeVendorDetails(UserRequest $request)
 //    {
 //	   	$this->userRepository->vendorDetailsStore($request->all());

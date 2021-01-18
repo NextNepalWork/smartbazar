@@ -155,14 +155,14 @@
                         </div>
                         <div class="col-xs-12 border-bottom">
                             <span>
-                                Seller: Nepal All Shop, Kathmandu, Nepal
+                                Seller: {{ ucfirst($vendor_detail->vendor_name) }}
                             </span>
                         </div>
-                        <div class="col-xs-8 border-right">
+                        {{-- <div class="col-xs-8 border-right">
                             <span>
                                 Package Weight: 2kg
                             </span>
-                        </div>
+                        </div> --}}
                         <div class="col-xs-4">
                             <span>
                                 {{ $order->orderProduct->sum('qty') }}

@@ -14,14 +14,7 @@
         .countdown {
             margin-left: 9px !important;
         }
-
-
-
-        /* .product-category.white-product .product {
-
-        }
-
-        .product-category.white-product .product .product_wrap_overlay {
+        /* .product-category.white-product .product .product_wrap_overlay {
             !* top: 0; *!
             right: 0;
             bottom: 0;
@@ -116,18 +109,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <a href=""
-                                   class="float-right view-more">view more<span class="ml-2"
-                                                                                uk-icon="forward"></span></a>
-
-                                @php
-                                    $category = \App\Model\Category::where('name', getHome('products_section_1'))->first();
-                                @endphp
-                                @if($category)
-                                    <a href="{{ route('category', ['slug' => $category->slug]) }}"
-                                       class="float-right view-more">view more<span class="ml-2"
-                                                                                    uk-icon="forward"></span></a>
-                                @endif
+                                <a href="{{ route('category', ['slug' => $value->name]) }}" class="float-right view-more">view more<span class="ml-2" uk-icon="forward"></span></a>
                                 <div class="clearfix"></div>
                             </div>
 
@@ -157,7 +139,6 @@
                                                         </div>
                                                     @endif
                                                     <div class="product-top">
-
                                                         <figure>
                                                             <a href="{{ route('product.show', ['slug' => $product->slug]) }}">
                                                                 <div class="product-image">
@@ -180,21 +161,16 @@
                                                         </div>
                                                         <div class="product-meta-container">
                                                             <div class="product-price-container">
-                                                <span class="price">
-
-                                                        <span class="Price-amount discount">
-                                                            <span class="Price-currencySymbol">Rs</span>{{ number_format($product->product_price) }}
-                                                        </span>
-
-
-                                                        <span class="Price-amount amount">
-                                                            <span class="Price-currencySymbol">Rs</span>{{ number_format($product->sale_price) }}</span>
-
-                                                </span>
+                                                            <span class="price">
+                                                                    <span class="Price-amount discount">
+                                                                        <span class="Price-currencySymbol">Rs</span>{{ number_format($product->product_price) }}
+                                                                    </span>
+                                                                    <span class="Price-amount amount">
+                                                                        <span class="Price-currencySymbol">Rs</span>{{ number_format($product->sale_price) }}</span>
+                                                            </span>
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     {{-- <div class="product_wrap_overlay">
                                                         <a href="javascript:;" class="btn-quickview" data-id="{{ $product->id }}"><span><i class="far fa-eye"></i></span></a>
                                                     </div> --}}
@@ -207,12 +183,8 @@
 
                             </div>
                         @endforeach
-
                     </div>
-
-
                 </div>
-
             </div>
 
 
@@ -221,23 +193,23 @@
         <section class="three-columns mb">
             <div class="container-fluid">
                 <div class="row  m-0">
-                    <div class="column">
-                        <a href="{{ getConfiguration('category_ads_link_1') }}"><img
+                    <div class="col-6 col-sm-3 mb-2">
+                        <a href="{{ getConfiguration('category_ads_link_1') }}"><img class="img img-fluid"
                                     src="{{ url('storage') . '/' . getConfiguration('category_ads_image_1') }}"
                                     alt="{{ getConfiguration('category_ads_2') }}"></a>
                     </div>
-                    <div class="column">
-                        <a href="{{ getConfiguration('category_ads_link_2') }}"><img
+                    <div class="col-6 col-sm-3 mb-2">
+                        <a href="{{ getConfiguration('category_ads_link_2') }}"><img class="img img-fluid"
                                     src="{{ url('storage') . '/' . getConfiguration('category_ads_image_2') }}"
                                     alt="{{ getConfiguration('category_ads_2') }}"></a>
                     </div>
-                    <div class="column">
-                        <a href="{{ getConfiguration('category_ads_link_3') }}"><img
+                    <div class="col-6 col-sm-3 mb-2">
+                        <a href="{{ getConfiguration('category_ads_link_3') }}"><img class="img img-fluid"
                                     src="{{ url('storage') . '/' . getConfiguration('category_ads_image_3') }}"
                                     alt="{{ getConfiguration('category_ads_3') }}"></a>
                     </div>
-                    <div class="column">
-                        <a href="{{ getConfiguration('category_ads_link_4') }}"><img
+                    <div class="col-6 col-sm-3 mb-2">
+                        <a href="{{ getConfiguration('category_ads_link_4') }}"><img class="img img-fluid"
                                     src="{{ url('storage') . '/' . getConfiguration('category_ads_image_4') }}"
                                     alt="{{ getConfiguration('category_ads_4') }}"></a>
                     </div>
@@ -245,6 +217,10 @@
                 </div>
             </div>
         </section>
+
+        @php
+            $category = \App\Model\Category::where('name', getHome('products_section_1'))->first();
+        @endphp
 
         @if(getProductsByCategory(getHome('products_section_2'))->isNotEmpty())
 
@@ -302,9 +278,8 @@
                         <div class="welcome_mall-item relative">
                             <a href="{{route('vendor-profile',$value->name)}}" class="welcome_mall-detail">
                                 <div class="welcome_mall-detail--logo">
-
                                     <figure>
-                                        <img src=" @if($value->company_images->first()){{asset('vendor_company_image/'.$value->company_images->first()->image)}} @endif "
+                                        <img class="img img-fluid" src=" @if($value->company_images->first()){{asset('vendor_company_image/'.$value->company_images->first()->image)}} @endif "
                                              alt="">
                                     </figure>
                                 </div>

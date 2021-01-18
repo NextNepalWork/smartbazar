@@ -442,8 +442,25 @@ class VendorController extends Controller
     public function getWithdrawRequest()
     {   
         $vendor_id = auth()->id();
+        $orders = OrderProduct::where('owner_id', auth()->id())->where('status', 4)->get();
+        $total_balance = 0;
+        $total_commission = 0;
+        $tax = 0;
+        foreach ($orders as $order) {
+            $price = $order->price * $order->qty;
+            $tax += $price * ($order->tax / 100);
+            $commission = $price * ($order->products->commission / 100);
+            $total_commission += $commission;
+            $total_balance += ($price - $commission);
+        }
+        $total_withdraws = Withdraw::where('vendor_id', auth()->id())->where('status', 2)->pluck('amount');
+        $total_withdraw = 0;
+        foreach ($total_withdraws as $withdraw) {
+            $total_withdraw += $withdraw;
+        }
+        $current_balance = $total_balance - $total_withdraw;
         $details = WithDraw::where('vendor_id', $vendor_id)->get();
-        return view('merchant.withdraw.create', compact('details'));
+        return view('merchant.withdraw.create', compact('details','current_balance'));
     }
 
  public function getWithdrawStore(WithDrawRequest $request)
@@ -474,7 +491,7 @@ class VendorController extends Controller
     {
 
         $withDrawStatus = WithdrawStatus::all();
-        $details = WithDraw::findOrFail($id);
+        $details = WithDraw::with('vendors')->findOrFail($id);
         return view('merchant.withdraw.edit', compact('details', 'withDrawStatus'));
     }
 
@@ -488,8 +505,25 @@ class VendorController extends Controller
 
     public function getWithdrawUse($id)
     {
-        $details = WithDraw::findOrFail($id);
-        return view('merchant.withdraw.use-create', compact('details'));
+        $details = WithDraw::findOrFail($id);        
+        $orders = OrderProduct::where('owner_id', auth()->id())->where('status', 4)->get();
+        $total_balance = 0;
+        $total_commission = 0;
+        $tax = 0;
+        foreach ($orders as $order) {
+            $price = $order->price * $order->qty;
+            $tax += $price * ($order->tax / 100);
+            $commission = $price * ($order->products->commission / 100);
+            $total_commission += $commission;
+            $total_balance += ($price - $commission);
+        }
+        $total_withdraws = Withdraw::where('vendor_id', auth()->id())->where('status', 2)->pluck('amount');
+        $total_withdraw = 0;
+        foreach ($total_withdraws as $withdraw) {
+            $total_withdraw += $withdraw;
+        }
+        $current_balance = $total_balance - $total_withdraw;
+        return view('merchant.withdraw.use-create', compact('details','current_balance'));
 
     }
 

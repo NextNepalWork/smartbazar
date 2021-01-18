@@ -20,7 +20,7 @@
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title">All Orders <small>({{ $ordersCount }})</small></h3>
-                        <a href="" class="btn btn-sm btn-danger pull-right">Add New</a>
+                        {{-- <a href="" class="btn btn-sm btn-danger pull-right">Add New</a> --}}
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">

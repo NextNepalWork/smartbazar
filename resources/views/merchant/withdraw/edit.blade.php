@@ -15,7 +15,7 @@
 	        	</tr>
 	        	<tr>
 	        		<th>Vendor Company</th>
-	        		<td></td>
+	        		<td>{{ $details->vendors->name }}</td>
 	        	</tr>
 	        	<tr>
 	        		<th>Withdraw Amount</th>

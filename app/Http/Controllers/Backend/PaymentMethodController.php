@@ -23,6 +23,7 @@ class PaymentMethodController extends Controller
             $image = null !== $payment->getImage()?$payment->getImage()->smallUrl: $payment->getDefaultImage()->smallUrl;
             $payment->image = $image;
         }
+        // dd($payments);
         return view('admin.payment.index',compact('payments','payment'));
 
     }

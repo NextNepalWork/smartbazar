@@ -55,15 +55,34 @@
                 </div>
 
                 <div class="form-group{{ $errors->has('shipping_amount') ? ' has-error' : '' }}">
-                    {!! Form::label('shipping_amount','Shipping Amount', ['class' => 'control-label']) !!}
-                    {{ Form::select('shipping_amount', $shipping_amounts, isset($order->shipping_amount) ? $order->shipping_amount : null, ['class' => 'form-control select2']) }}
-
+                    <label class="control-label">Shipping Amount</label>
+                    <select class="form-control select2" name="shipping_amount" id="shipping_amount">
+                        <option value="">-- Select Shipping Amount --</option>
+                        @if(isset($shipping_amount))
+                            @foreach ($shipping_amount as $ship_amount)                            
+                                <option value="{{ $ship_amount->place }}" data-id={{$ship_amount->amount}}
+                                    {{ (isset($order) && ($ship_amount['place'] == $order->order_place)) ? 'selected' : ''}}>
+                                    Rs. {{$ship_amount->amount}} ({{$ship_amount->place}})</option>                                
+                            @endforeach
+                        @endif
+                    </select>
                     @if ($errors->has('shipping_amount'))
                         <span class="help-block">
                             {{ $errors->first('shipping_amount') }}
                         </span>
                     @endif
                 </div>
+
+                {{-- <div class="form-group{{ $errors->has('shipping_amount') ? ' has-error' : '' }}">
+                    {!! Form::label('shipping_amount','Shipping Amount', ['class' => 'control-label']) !!}
+                    {{ Form::text('shipping_amount', isset($order->shipping_amount) ? $order->shipping_amount : null, ['class' => 'form-control']) }}
+
+                    @if ($errors->has('shipping_amount'))
+                        <span class="help-block">
+                            {{ $errors->first('shipping_amount') }}
+                        </span>
+                    @endif
+                </div> --}}
                  <div class="form-group{{ $errors->has('tracking') ? ' has-error' : '' }}">
                     {!! Form::label('tracking','Live Tracking', ['class' => 'control-label']) !!}
                     {{ Form::textarea('tracking', isset($order->tracking) ? $order->tracking : null, ['class' => 'form-control ']) }}

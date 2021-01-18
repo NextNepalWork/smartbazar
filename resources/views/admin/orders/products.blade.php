@@ -27,16 +27,16 @@
         </td>
         <td class="item_cost" width="1%">
             <span>RS{{ $price }}</span>
-            <input type="hidden" name="price" value="{{ $product->price }}">
+            <input type="hidden" value="{{ $product->price }}">
         </td>
         <td class="quantity" width="1%">
             <div class="view">
-                <input type="number" name="quantity" value="{{ isset($product->quantity) ? $product->quantity : 1 }}" min="1" class="form-control">
+                <input type="number" value="{{ isset($product->quantity) ? $product->quantity : 1 }}" min="1" class="form-control">
             </div>
         </td>
         <td class="discount" width="2%">
             <div class="view">
-                <input type="number" name="discount" value="{{ isset($product->discount) ? $product->discount : 0 }}" min="0" class="form-control">
+                <input type="number" value="{{ isset($product->discount) ? $product->discount : 0 }}" min="0" class="form-control">
             </div>
         </td>
         <td class="tax" width="2%">

@@ -698,7 +698,10 @@
         tempEditUrl = tempEditUrl.replace(':id', id);
         $modal.load(tempEditUrl, function (response) {
         // console.log(response);
-        });
+        // $modal.modal({
+        //             show: true
+        //         });
+        // });
     });
 
     $(document).on("click", ".add_to_wishlist", function (e) {

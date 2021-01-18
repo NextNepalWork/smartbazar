@@ -92,6 +92,62 @@
                 });
             });
 
+            // coupon function
+            // $('.coupon_btn').click(function(e){
+            //     e.preventDefault();
+            //     var values = $("input[name='product_id[]']")
+            //         .map(function(){return $(this).val();}).get();
+            //     var coupon = $("input[name=coupon_code").val();
+
+
+            //     $.ajaxSetup({
+            //         headers: {
+            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //         }
+            //     });
+            //     $.ajax({
+            //         type: 'POST',
+            //         url: "{{ route('coupon.check') }}",
+            //         data: {
+            //             product_id: values,
+            //             coupon_code:coupon
+            //         },
+            //         beforeSend: function (data) {
+            //             $(this).button('loading');
+            //         },
+            //         success: function (data) {
+            //             if (data.success) {
+            //                 $(this).prop('disabled', true);
+            //                 $('.alert.alert-danger').fadeOut();
+            //                 $('.alert.alert-success').fadeIn().html(data.message);
+            //             }
+
+            //             // window.setTimeout(function () {
+            //             //     location.reload()
+            //             // }, 2000);
+            //         },
+            //         error: function (xhr, ajaxOptions, thrownError) {
+            //             var errorsHolder = '';
+            //             errorsHolder += '<ul>';
+
+            //             var err = eval("(" + xhr.responseText + ")");
+            //             $.each(err.errors, function (key, value) {
+            //                 errorsHolder += '<li>' + value + '</li>';
+            //             });
+
+            //             errorsHolder += '</ul>';
+
+            //             $('.alert.alert-danger').fadeIn().html(errorsHolder);
+            //         },
+            //         complete: function () {
+            //             $("form")[0].reset(),
+            //             $(this).button('reset');
+            //             // $("html, body").animate({scrollTop: 0}, "slow");
+            //         }
+            //     });
+
+            // });
+
         });
     </script>
 

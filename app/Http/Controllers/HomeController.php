@@ -95,6 +95,51 @@ class HomeController extends Controller
         }
 
     }
+    public function couponCheckAjax(Request $request){
+        $val = $request->input('coupon_code');
+        echo $val;
+        exit(); 
+        if (session()->exists('coupon')) {
+            return redirect()->back()->with('success', 'Coupon has already applied!');
+        }
+        if ($val != null) {
+            $coupon = Coupon::where('code', $val)->first();
+            if (!$coupon) {
+                return redirect()->back()->with('error', 'Coupon Does not exist!');
+
+            } else {
+                if (OrderProduct::where('coupon_id', $coupon->id)->get()->count() >= $coupon->uses_per_coupon) {
+                    return redirect()->back()->with('error', 'Coupon Maximum Limit Exceeded!');
+
+                }
+                if (Carbon::now()->toDateString() < $coupon->start_date) {
+                    return redirect()->back()->with('error', 'Coupon Not Started Yet!');
+
+                }
+                if (Carbon::now()->toDateString() > $coupon->end_date) {
+                    return redirect()->back()->with('error', 'Coupon Expired!');
+
+                }
+                $coupon_product = CouponProduct::where('coupon_id', $coupon->id)->whereIn('product_id', $request->product_id)->get();
+                if ($coupon_product->count() > 0) {
+                    session()->put('coupon', [
+                        'id' => $coupon->id,
+                        'product_id' => $coupon_product->first()->product_id,
+                        'code' => $coupon->code,
+                        'discount_value' => $coupon->discount_value
+                    ]);
+                    return redirect()->back()->with('success', 'Your Coupon code is valid.' . ' You got Discount of Rs' . $coupon->discount_value . '!');
+
+                } else {
+                    return redirect()->back()->with('error', 'This Coupon Does not Applied to This Product!');
+                }
+
+            }
+        } else {
+            return redirect()->back()->with('error', 'Field is empty!');
+
+        }
+    }
 
     public function ppcGenerate(Request $request)
     {

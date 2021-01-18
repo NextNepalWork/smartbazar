@@ -16,23 +16,25 @@ class OrderController extends Controller
 {
     private $order;
 
-    public function __construct( OrderRepository $order ) {
+    public function __construct(OrderRepository $order)
+    {
         $this->order = $order;
     }
 
-    public function index() {
-        $ordersCount = Order::whereHas('orderProduct',function ($query) {
+    public function index()
+    {
+        $ordersCount = Order::whereHas('orderProduct', function ($query) {
             $query->where('owner_id', auth()->id());
         })->count();
 
-        return view( 'merchant.order.index', compact( 'ordersCount' ) );
+        return view('merchant.order.index', compact('ordersCount'));
     }
 
-    public function getOrdersJson( Request $request )
+    public function getOrdersJson(Request $request)
     {
-        $orders = Order::whereHas('orderProduct',function ($query) {
-                $query->where('owner_id', auth()->id());
-            })->get();
+        $orders = Order::whereHas('orderProduct', function ($query) {
+            $query->where('owner_id', auth()->id());
+        })->get();
 
         if (null === $orders) {
             return datatables($orders)->toJson();
@@ -84,13 +86,10 @@ class OrderController extends Controller
                 $priceTotal += $orderValue->shipping_amount;
             }
 
-            $ordersArray[ $orderKey ]['price_total'] = number_format($priceTotal, 2);
-
-
+            $ordersArray[$orderKey]['price_total'] = number_format($priceTotal, 2);
         }
 
         return datatables($ordersArray)->toJson();
-
     }
 
     public function getOrderReturns()
@@ -99,17 +98,17 @@ class OrderController extends Controller
         return view('merchant.order.order_return', compact('order_returns'));
     }
 
-    public function getOrderReturnJson( Request $request )
+    public function getOrderReturnJson(Request $request)
     {
-        $order_returns = OrderReturnRequest::whereHas('orderReturnProducts',function ($query) {
-            $query->whereHas('order_product',function ($query) {
-            $query->where('owner_id', auth()->id());
+        $order_returns = OrderReturnRequest::whereHas('orderReturnProducts', function ($query) {
+            $query->whereHas('order_product', function ($query) {
+                $query->where('owner_id', auth()->id());
             });
         })->get();
 
         $orderReturnArray = [];
 
-        foreach ( $order_returns as $orderReturnKey => $orderReturnValue ) {
+        foreach ($order_returns as $orderReturnKey => $orderReturnValue) {
             $orderReturnArray[$orderReturnKey]['id'] = $orderReturnValue->id;
 
             $orderReturnArray[$orderReturnKey]['userOrder'] = [
@@ -138,25 +137,23 @@ class OrderController extends Controller
             ];
 
 
-            $orderReturnArray[ $orderReturnKey ]['products'] = [
+            $orderReturnArray[$orderReturnKey]['products'] = [
                 'name' => $orderReturnValue->orderReturnProducts->first()->order_product->products->name,
                 'product_id'   => $orderReturnValue->orderReturnProducts->first()->order_product->product_id,
                 'order_id'     => $orderReturnValue->orderReturnProducts->first()->order_product->order_id,
                 'qty'          => $orderReturnValue->orderReturnProducts->first()->qty,
                 'price'        => $orderReturnValue->orderReturnProducts->first()->order_product->price,
             ];
-
         }
 
-        return datatables( $orderReturnArray )->toJson();
-
+        return datatables($orderReturnArray)->toJson();
     }
 
     public function editOrderReturn($id)
     {
         $order_return = OrderReturnRequest::findOrFail($id);
 
-        $orderReturnStatuses = array( '' => 'Select Order Status' ) + OrderReturnStatus::pluck( 'name', 'id' )->toArray();
+        $orderReturnStatuses = array('' => 'Select Order Status') + OrderReturnStatus::pluck('name', 'id')->toArray();
 
         return view('merchant.order.edit_order_return', compact('order_return', 'orderReturnStatuses'));
     }
@@ -191,7 +188,7 @@ class OrderController extends Controller
 
         $order_return->users()->update([
             'email' => $request->email,
-//            'user_name' => $request->customer
+            //            'user_name' => $request->customer
         ]);
 
         $order_return->orderReturnProducts()->update([

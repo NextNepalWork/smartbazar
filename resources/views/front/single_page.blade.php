@@ -538,11 +538,11 @@
                                                     @endif
                                                 </h3>
                                                 <hr>
-                                                <b>Total Products: 200</b>
+                                                <b>Total Products: {{ $vendor_products_count}}</b>
                                                 <hr>
                                                 <b>Average Ratings: 82.2%</b>
                                                 <hr>
-                                                <b>Total Orders: 200</b>
+                                                <b>Total Orders: {{ $vendor_orders_count}}</b>
                                                 <hr>
                                                 <b>Seller Customer Service
                                                     Helpline: @if( App\Model\VendorDetail::where('user_id', $product->user_id)->first())

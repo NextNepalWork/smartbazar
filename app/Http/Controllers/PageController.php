@@ -7,10 +7,13 @@ use App\Model\VendorWallet;
 use App\Page;
 use Illuminate\Http\Request;
 use App\Model\Advertise;
+use App\Model\Order;
 use App\Model\Product;
 use App\Model\VendorCoverImage;
 
 use App\Model\Vendor;
+use App\VendorRating;
+
 class PageController extends Controller
 {
     // protected $pageTemplate = 'pages.templates.';
@@ -22,6 +25,8 @@ class PageController extends Controller
             $vendor = VendorDetail::where('id', '=', $vendorprofile->id)->first();
             $products = Product::where('status', '=', 'published')
                 ->where('approved', 1)->where('user_id', '=', $vendor->user_id)->paginate(20);
+            $orders_count = Order::where('user_id',$vendor->user_id)->get()->count();
+            $rating=VendorRating::where('user_id',$vendor->user_id)->get();
 
             $cover= VendorCoverImage::where('vendor_details_id',$vendor->id)->first();
             if ($request->ajax()) {
@@ -45,7 +50,7 @@ class PageController extends Controller
 
             }
 
-            return view('mall.vendor_profile', compact('vendor', 'products', 'cover'));
+            return view('mall.vendor_profile', compact('vendor', 'products', 'cover','orders_count','rating'));
         }
         $page = Page::where('slug', $slug);
         $page = $page->firstOrFail();

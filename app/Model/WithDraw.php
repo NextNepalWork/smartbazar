@@ -26,7 +26,7 @@ class WithDraw extends Model
 
     public function vendors()
     {
-        return $this->belongsTo(Vendor::class, 'vendor_id');
+        return $this->belongsTo(Vendor::class, 'vendor_id','user_id');
     }
 
 

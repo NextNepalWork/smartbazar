@@ -150,7 +150,7 @@ class EloquentOrderRepository extends AbstractRepository implements OrderReposit
                 'last_name'  => $attributes['last_name'],
                 'email'      => $attributes['email'],
                 'mobile'     => $attributes['mobile'],
-                'phone'     => $attributes['phone'],
+                // 'phone'     => $attributes['phone'],
                 'area'       => $attributes['area'],
                 'district'   => $attributes['district'],
                 'zone'       => $attributes['zone'],
@@ -166,7 +166,7 @@ class EloquentOrderRepository extends AbstractRepository implements OrderReposit
                 'last_name'  => $attributes['last_name'],
                 'email'      => $attributes['email'],
                 'mobile'     => $attributes['mobile'],
-                'phone'     => $attributes['phone'],
+                // 'phone'     => $attributes['phone'],
                 'area'       => $attributes['area'],
                 'district'   => $attributes['district'],
                 'zone'       => $attributes['zone'],
@@ -176,15 +176,21 @@ class EloquentOrderRepository extends AbstractRepository implements OrderReposit
 
             $attributes['address_id'] = $address->id;
         }
+        $location = $attributes['shipping_addr'];
+        $shipdetail = ShippingAmount::where('place', $location)->first();
 
         $order = $this->entity->create([
             'address_id'          => $attributes['address_id'],
             'user_id'             => isset($attributes['user_id']) ? $attributes['user_id'] : null,
             'shipping_amount'     => $attributes['shipping_amount'],
+            'order_place'         => $shipdetail->place,
+            'payment_method_id'   => 2,
             'order_status_id'     => $attributes['order_status'],
-            'order_note'          => $attributes['order_note'],
+            'order_note'          => isset($attributes['order_note']) ? $attributes['order_note'] : null,
             'order_date'          => Carbon::now(),
-            'delivery_destination' => $attributes['delivery_destination'],
+            'delivery_destination' => isset($attributes['delivery_destination']) ? $attributes['delivery_destination'] : null,
+            'code' => Carbon::now()->month . rand(0, 9) . auth()->id() . rand(0, 9) . Carbon::now()->day . rand(0, 9),
+            'barcode' => $this->generateBarcodeNumber()
         ]);
 
         foreach ($attributes['products'] as $orderProduct) {

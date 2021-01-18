@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Model\VendorDetail;
 use App\Model\WithDraw;
 use App\Model\WithdrawStatus;
 use Illuminate\Http\Request;
@@ -11,14 +12,14 @@ class WithDrawController extends Controller
 {
     public function getIndex()
     {
-    	$withdraws = WithDraw::all();
+        $withdraws = WithDraw::with('vendors')->get();
     	return view('admin.withdraw.index',compact('withdraws'));
     }
 
     public function getEdit($id)
     {
         $withDrawStatus = WithdrawStatus::all();
-    	$details = WithDraw::findOrFail($id);
+    	$details = WithDraw::with('vendors')->findOrFail($id);
     	return view('admin.withdraw.edit',compact('details','withDrawStatus'));
     }
 

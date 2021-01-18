@@ -1,5 +1,5 @@
 <div class="row">
-    <input type="hidden" name="address_id" value="{{ $address->id }}">
+    <input type="hidden" name="address_id" value="{{ isset($address) ? $address->id :''}}">
     <div class="col-md-6">
         <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
             {!! Form::label('first_name','First Name', ['class' => 'control-label']) !!}
@@ -39,19 +39,19 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
-            {!! Form::label('phone','Phone', ['class' => 'control-label']) !!}
-            {!! Form::text('phone',isset($address->phone) ? $address->phone : null, ['class'=> 'form-control']) !!}
+        <div class="form-group{{ $errors->has('mobile') ? ' has-error' : '' }}">
+            {!! Form::label('mobile','Mobile', ['class' => 'control-label']) !!}
+            {!! Form::text('mobile',isset($address->mobile) ? $address->mobile : null, ['class'=> 'form-control']) !!}
 
-            @if ($errors->has('phone'))
+            @if ($errors->has('mobile'))
                 <span class="help-block">
-                    {{ $errors->first('phone') }}
+                    {{ $errors->first('mobile') }}
                 </span>
             @endif
         </div>
     </div>
 </div>
-<div class="row">
+{{-- <div class="row">
     <div class="col-md-6">
         <div class="form-group{{ $errors->has('address1') ? ' has-error' : '' }}">
             {!! Form::label('address1','Address Line 1', ['class' => 'control-label']) !!}
@@ -76,12 +76,12 @@
             @endif
         </div>
     </div>
-</div>
+</div> --}}
 <div class="row">
     <div class="col-md-6">
         <div class="form-group{{ $errors->has('country') ? ' has-error' : '' }}">
             {!! Form::label('country','Country', ['class' => 'control-label']) !!}
-            {{ Form::select('country', $countries, 1, ['class' => 'form-control select2', 'disabled' => 'disabled']) }}
+            {{ Form::text('country', isset($address->country) ? $address->country: null, ['class' => 'form-control', 'disabled' => 'disabled']) }}
 
             @if ($errors->has('country'))
                 <span class="help-block">
@@ -91,13 +91,13 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="form-group{{ $errors->has('state') ? ' has-error' : '' }}">
-            {!! Form::label('state','State', ['class' => 'control-label']) !!}
-            {{ Form::select('state', $states, isset($address->state_id) ? $address->state_id: null, ['class' => 'form-control select2']) }}
+        <div class="form-group{{ $errors->has('zone') ? ' has-error' : '' }}">
+            {!! Form::label('zone','Zone', ['class' => 'control-label']) !!}
+            {{ Form::text('zone', isset($address->zone) ? $address->zone : null, ['class' => 'form-control']) }}
 
-            @if ($errors->has('state'))
+            @if ($errors->has('zone'))
                 <span class="help-block">
-                    {{ $errors->first('state') }}
+                    {{ $errors->first('zone') }}
                 </span>
             @endif
         </div>
@@ -105,18 +105,30 @@
 </div>
 <div class="row">
     <div class="col-md-6">
-        <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }}">
-            {!! Form::label('city','City', ['class' => 'control-label']) !!}
-            {!! Form::text('city',isset($address->city) ? $address->city : null, ['class'=> 'form-control']) !!}
+        <div class="form-group{{ $errors->has('district') ? ' has-error' : '' }}">
+            {!! Form::label('district','District', ['class' => 'control-label']) !!}
+            {!! Form::text('district',isset($address->district) ? $address->district : null, ['class'=> 'form-control']) !!}
 
-            @if ($errors->has('city'))
+            @if ($errors->has('district'))
                 <span class="help-block">
-                    {{ $errors->first('city') }}
+                    {{ $errors->first('district') }}
                 </span>
             @endif
         </div>
     </div>
     <div class="col-md-6">
+        <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }}">
+            {!! Form::label('area','Area', ['class' => 'control-label']) !!}
+            {!! Form::text('area',isset($address->area) ? $address->area : null, ['class'=> 'form-control']) !!}
+
+            @if ($errors->has('area'))
+                <span class="help-block">
+                    {{ $errors->first('area') }}
+                </span>
+            @endif
+        </div>
+    </div>
+    {{-- <div class="col-md-6">
         <div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">
             {!! Form::label('postcode','Postcode / ZIP', ['class' => 'control-label']) !!}
             {!! Form::text('postcode',isset($address->postcode) ? $address->postcode : null, ['class'=> 'form-control']) !!}
@@ -127,5 +139,5 @@
                 </span>
             @endif
         </div>
-    </div>
+    </div> --}}
 </div>

@@ -61,9 +61,11 @@ class OrderController extends Controller
     {
         // $orderStatuses = array( '' => 'Select Order Status' ) + OrderStatus::pluck( 'name', 'id' )->toArray();
         $orderStatuses = OrderStatus::all();
+        $shipping_amount = ShippingAmount::get();
+        // dd($shipping_amount);
         $shipping_amounts = array('' => 'Select Shipping Amount') + ShippingAmount::pluck('place', 'amount')->toArray();
         $delivery_destinations = DeliveryDestination::pluck('name', 'id')->toArray();
-        return view('admin.orders.create', compact('orderStatuses', 'shipping_amounts', 'delivery_destinations'));
+        return view('admin.orders.create', compact('orderStatuses', 'shipping_amounts', 'delivery_destinations','shipping_amount'));
     }
 
     public function store(Request $request)
@@ -74,8 +76,9 @@ class OrderController extends Controller
             'last_name' => 'required|max:255',
             'email' => 'required|email',
             'products' => 'required|array',
-            'delivery_destination' => 'required'
+            // 'delivery_destination' => 'required'
         ]);
+
 
         try {
             $this->order->create($request->all());
@@ -91,7 +94,6 @@ class OrderController extends Controller
 
     public function show($id)
     {
-
     }
 
     public function edit($id)
@@ -108,11 +110,14 @@ class OrderController extends Controller
 
         // $orderStatuses = array( '' => 'Select Order Status' ) + OrderStatus::pluck( 'name', 'id' )->toArray();
         $orderStatuses = OrderStatus::all();
+        $shipping_amount = ShippingAmount::get();
+        // dd($shipping_amount);
         $shipping_amounts = array('' => 'Select Shipping Amount') + ShippingAmount::pluck('place', 'amount')->toArray();
         $delivery_destinations = DeliveryDestination::pluck('name', 'id')->toArray();
+        // dd($shipping_amounts);
 
 
-        return view('admin.orders.edit', compact('order', 'products', 'userDetails', 'orderStatuses', 'shipping_amounts', 'delivery_destinations'));
+        return view('admin.orders.edit', compact('order', 'products', 'userDetails', 'orderStatuses', 'shipping_amounts', 'delivery_destinations','shipping_amount'));
     }
 
     public function update(Request $request, $id)
@@ -138,8 +143,7 @@ class OrderController extends Controller
         $user = Order::where('id', $id)->first()->user_id;
         $email = User::findorfail($user)->email;
 
-        $sendData = array
-        (
+        $sendData = array(
             'body' => 'Your Order #' . $order->code . ' has been ' . $order->orderStatus->name,
             'title' => 'Order ' . $order->orderStatus->name,
             'icon' => 'myicon',/*Default Icon*/
@@ -147,10 +151,10 @@ class OrderController extends Controller
             'image' => '',
             'order_id' => $id
         );
-        $response =onesignalNotificationToSpecificUser($sendData);
+        $response = onesignalNotificationToSpecificUser($sendData);
 
         User::findorfail($user)->notify(new NotifyOrderUpdated($order));
-        // \Mail::to($email)->send(new \App\Mail\OrderUpdated($data));
+        \Mail::to($email)->send(new \App\Mail\OrderUpdated($data));
 
         return response()->json([
             'success' => true,
@@ -216,17 +220,16 @@ class OrderController extends Controller
             }
             $shipping_amount = $product['shipping_amount'];
             $priceTotal = $priceTotal + $shipping_amount;
-
         }
 
         if ($request->has('order')) {
             $order = $this->order->getById($request->input('order'));
-//            $tax = 0;
+            //            $tax = 0;
 
-//            if ($order->orderProduct->first()->tax) {
-//                $tax = ($priceTotal * $order->orderProduct->first()->tax) / 100;
-//            }
-//            $priceTotal += $tax;
+            //            if ($order->orderProduct->first()->tax) {
+            //                $tax = ($priceTotal * $order->orderProduct->first()->tax) / 100;
+            //            }
+            //            $priceTotal += $tax;
 
             return view('admin.orders.order-summary', compact('order', 'priceTotal', 'shipping_amount', 'taxAmount'));
         }
@@ -236,14 +239,14 @@ class OrderController extends Controller
 
     public function updateUserAddress(Request $request)
     {
-        $address = DB::table('addresses')
+        $address = DB::table('shipping_accounts')
             ->where('user_id', '=', $request->input('user'))
             ->whereNotNull('user_id')
             ->first();
-        $countries = Country::pluck('name', 'id')->toArray();
-        $states = array('' => 'Select a state') + State::pluck('name', 'id')->toArray();
+        // $countries = Country::pluck('name', 'id')->toArray();
+        // $states = array('' => 'Select a state') + State::pluck('name', 'id')->toArray();
 
-        return view('admin.orders.update-address', compact('address', 'countries', 'states'));
+        return view('admin.orders.update-address', compact('address'));
     }
 
     public function getOrderedProducts($id)
@@ -257,7 +260,6 @@ class OrderController extends Controller
             $product->price = $product->pivot->price;
             $product->quantity = $quantity;
             $product->discount = $discount;
-
         }
 
         return $products;
@@ -393,7 +395,6 @@ class OrderController extends Controller
 
 
         return datatables($ordersArray)->toJson();
-
     }
 
     public function getOrderReturns()
@@ -444,11 +445,9 @@ class OrderController extends Controller
                 'qty' => $orderReturnValue->orderReturnProducts->first()->qty,
                 'price' => $orderReturnValue->orderReturnProducts->first()->order_product->price,
             ];
-
         }
 
         return datatables($orderReturnArray)->toJson();
-
     }
 
     public function editOrderReturn($id)
@@ -491,7 +490,7 @@ class OrderController extends Controller
 
         $order_return->users()->update([
             'email' => $request->email,
-//            'user_name' => $request->customer
+            //            'user_name' => $request->customer
         ]);
 
         $order_return->orderReturnProducts()->update([
@@ -523,6 +522,16 @@ class OrderController extends Controller
             ->where('orders.id', '=', $order->id)
             ->select('users.id as user_id', 'users.first_name as user_first_name', 'users.last_name as user_last_name', 'shipping_accounts.*')
             ->first();
+        $order_product = DB::table('orders')
+            ->leftJoin('order_product', 'orders.id', '=', 'order_product.order_id')
+            ->where('orders.id', '=', $order->id)
+            ->first();
+        $vendor_detail = DB::table('order_product')
+            ->leftJoin('vendor_details', 'order_product.owner_id', '=', 'vendor_details.user_id')
+            ->where('order_product.id', '=', $order_product->id)
+            ->select('vendor_details.id as vendor_id', 'vendor_details.name as vendor_name')
+            ->first();
+
 
         $qrCode = new QrCode();
         $qrCode
@@ -552,7 +561,7 @@ class OrderController extends Controller
         $ordercode->setFontSize(8);
         $order_code = $ordercode->generate();
 
-        return view('admin.orders.barcode', compact('order', 'userDetails', 'code', 'qrLogo', 'order_code'));
+        return view('admin.orders.barcode', compact('order', 'userDetails', 'code', 'qrLogo', 'order_code','vendor_detail'));
     }
 
     public function exportToExcel()

@@ -17,6 +17,7 @@ Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCall
 //Route::get('/brands/product', 'BrandController@getBrandProducts')->name('brands.product');
 Route::post('/referal/check', 'HomeController@referalCheck')->name('referal.check');
 Route::post('/coupon/check', 'HomeController@couponCheck')->name('coupon.check');
+Route::post('/coupon/check/ajax', 'HomeController@couponCheckAjax')->name('coupon.check.ajax');
 Route::get('/search', 'SearchController@getSearch')->name('search');
 Route::post('/product/{id}', 'HomeController@ppcGenerate')->name('referlink.generate');
 
