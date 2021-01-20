@@ -517,16 +517,15 @@
                                 <div role="tabpanel" class="tab-pane active" id="simple">
                                     <section class="simple__box">
                                         <div class="row">
-                                            <div class="form-group col-md-7">
+                                            <div class="form-group col-md-12">
                                                 <input type="text" class="form-control" name="name"
                                                        placeholder="Product title"
                                                        value="{{old('name') ? old('name'): ''}}">
-                                            </div>
-                                
+                                            </div>                                   
                                             <!--<div class="col-md-5">-->
                                             <!--    <input type="number" name="commission" min="0" class="form-control"-->
                                             <!--           placeholder="Enter Owner Commission for this product"-->
-                                            <!--           value="{{old('commission')}}">-->
+                                            {{-- <!--           value="{{old('commission')}}">--> --}}
                                             <!--</div>-->
                                         </div>
                                         <div class="row">
@@ -553,13 +552,26 @@
                                                 </div>
 
                                             </div>
-                                            <div class="form-group col-md-6 sale--inline">
-                                                <label class="uk-form-label" for="form-horizontal-text">Image</label>
+                                        </div>
 
+                                        <div class="row">
+                                            <div class="form-group col-md-6 sale--inline">
+                                                <label class="uk-form-label" for="form-horizontal-text">Select 
+                                                    Image</label>
                                                 @include('merchant.product.images')
                                             </div>
 
+                                            <div class="col-md-6">
+                                                <label class="uk-form-label" for="form-horizontal-text">Select Warranty</label>
+                                                <select name="product_warranty" class="form-control">
+                                                    <option value="" selected>-- Select Warranty --</option>
+                                                    @foreach($warranty_types as $warranty_key => $warranty_type)
+                                                    <option value="{{ $warranty_key }}">{{ $warranty_type }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
+
                                         {{--&nbsp;<span uk-icon="info" uk-tooltip="title:dfsfdsafdafdsfsd dsfsdfds dfsd fsd; delay: 500;pos:right"></span>--}}
                                         <div class="title">Negotiable</div>
                                         <div class="row">

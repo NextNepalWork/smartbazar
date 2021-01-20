@@ -21,7 +21,7 @@
         border-color: #e08e0b;
     }
 </style>
-{!! Form::file('image',['class' => 'product-image-element form-control','data-token' => csrf_token()]) !!}
+{!! Form::file('image',['class' => 'product-image-element','data-token' => csrf_token()]) !!}
 
 <div class="product-image-list">
 

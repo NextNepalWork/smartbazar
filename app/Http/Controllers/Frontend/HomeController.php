@@ -45,6 +45,30 @@ class HomeController extends Controller
 //                    Session::put('times', 1);
                     return view('front.reloadmore', compact('products'));
                 }
+                if (Session::get('times') == 4) {
+                    $products = Product::where('status', '=', 'published')
+                        ->where('approved', 1)->latest()->take(60)->get();
+//                    Session::put('times', 1);
+                    return view('front.reloadmore', compact('products'));
+                }
+                if (Session::get('times') == 5) {
+                    $products = Product::where('status', '=', 'published')
+                        ->where('approved', 1)->latest()->take(72)->get();
+//                    Session::put('times', 1);
+                    return view('front.reloadmore', compact('products'));
+                }
+                if (Session::get('times') == 6) {
+                    $products = Product::where('status', '=', 'published')
+                        ->where('approved', 1)->latest()->take(84)->get();
+//                    Session::put('times', 1);
+                    return view('front.reloadmore', compact('products'));
+                }
+                if (Session::get('times') == 7) {
+                    $products = Product::where('status', '=', 'published')
+                        ->where('approved', 1)->latest()->take(96)->get();
+//                    Session::put('times', 1);
+                    return view('front.reloadmore', compact('products'));
+                }
             }
 
             $products = Product::where('status', '=', 'published')

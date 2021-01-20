@@ -122,7 +122,7 @@
                         {{ $order->payment->name }}
                     </div>   
                     <div class="col-xs-12">
-                        {{ $grandTotal }}
+                        Total: Rs.{{ $grandTotal }}
                     </div>   
                 </div>
             </div>
@@ -165,7 +165,7 @@
                         </div> --}}
                         <div class="col-xs-4">
                             <span>
-                                {{ $order->orderProduct->sum('qty') }}
+                                Quantity: {{ $order->orderProduct->sum('qty') }}
                             </span>
                         </div>
                     </div>

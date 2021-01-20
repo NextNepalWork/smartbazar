@@ -158,7 +158,7 @@ function getConfiguration($key)
 function getHome($key)
 {
     $config = Home::where('home_key', '=', $key)->first();
-  
+
     if ($config != null) {
         return $config->home_value;
     }
@@ -219,7 +219,6 @@ function selectChild($id)
     $categories = addRelation($categories);
 
     return $categories;
-
 }
 
 function addRelation($categories)
@@ -230,7 +229,6 @@ function addRelation($categories)
         $sub = selectChild($item->id);
 
         return $item = array_add($item, 'subCategory', $sub);
-
     });
 
     return $categories;
@@ -248,10 +246,10 @@ function getRatings($id)
         $two = $product->reviews->where('stars', 2)->count();
         $one = $product->reviews->where('stars', 1)->count();
         $average = (($product->reviews->where('stars', 5)->count() * 5) +
-                ($product->reviews->where('stars', 4)->count() * 4) +
-                ($product->reviews->where('stars', 3)->count() * 3) +
-                ($product->reviews->where('stars', 2)->count() * 2) +
-                ($product->reviews->where('stars', 1)->count() * 1)) / $total;
+            ($product->reviews->where('stars', 4)->count() * 4) +
+            ($product->reviews->where('stars', 3)->count() * 3) +
+            ($product->reviews->where('stars', 2)->count() * 2) +
+            ($product->reviews->where('stars', 1)->count() * 1)) / $total;
     }
 
     $product_reviews = [
@@ -295,8 +293,6 @@ function globalproducts($id)
             unset($img);
             unset($product->images);
         }
-
-
     }
     return $product;
 }
@@ -323,8 +319,8 @@ function globalproductsonesignal($id)
 
 
         $value->ratings = getRatings($value->id);
-        $value->long_description='as';
-  $product = array_add($value, 'imgs', $img);
+        $value->long_description = 'as';
+        $product = array_add($value, 'imgs', $img);
         unset($img);
         unset($product->images);
     }
@@ -346,82 +342,83 @@ function onesignalNotification($sendData)
     $big_picture = array(
         "id1" => $sendData['image']
     );
-    if(isset($sendData['order_id'])){
-      
+    if (isset($sendData['order_id'])) {
 
-    $fields = array(
-        'app_id' => 'a12c1e7a-8260-4005-887b-e9df809b85e2',
-        // 'include_player_ids' => array($device_id),
-        'included_segments' => array('All'),
-        'contents' => $content,
-        'headings' => $headings,
-        'large_icon' => 'https://files.readme.io/3477f0a-small-favicon-32x32.png',
-        'data' => ['order_id'=>$sendData['order_id']]
-    );
-    $fields = json_encode($fields);
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-        'Authorization: Basic Yzc0M2UyZGItYjNiMi00MjZkLThjMzEtNGRjYWQxNDAyYmQz'));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_HEADER, FALSE);
-    curl_setopt($ch, CURLOPT_POST, TRUE);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        $fields = array(
+            'app_id' => 'a12c1e7a-8260-4005-887b-e9df809b85e2',
+            // 'include_player_ids' => array($device_id),
+            'included_segments' => array('All'),
+            'contents' => $content,
+            'headings' => $headings,
+            'large_icon' => 'https://files.readme.io/3477f0a-small-favicon-32x32.png',
+            'data' => ['order_id' => $sendData['order_id']]
+        );
+        $fields = json_encode($fields);
 
-    $result = curl_exec($ch);
-    $data = json_decode($result);
-    curl_close($ch);
-    if (!empty($data->recipients) and $data->recipients >= 1) {
-        $response = '1';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json; charset=utf-8',
+            'Authorization: Basic Yzc0M2UyZGItYjNiMi00MjZkLThjMzEtNGRjYWQxNDAyYmQz'
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+        $result = curl_exec($ch);
+        $data = json_decode($result);
+        curl_close($ch);
+        if (!empty($data->recipients) and $data->recipients >= 1) {
+            $response = '1';
+        } else {
+            $response = '0';
+        }
+        dd($response);
+        return $response;
     } else {
-        $response = '0';
+        $product = Product::findOrFail($sendData['id']);
+        $product->imgs = $product->getImageAttribute()->mediumUrl;
+        $product->long_description = 'as';
+
+
+        $fields = array(
+            'app_id' => 'a12c1e7a-8260-4005-887b-e9df809b85e2',
+            // 'include_player_ids' => array($device_id),
+            'included_segments' => array('All'),
+            'contents' => $content,
+            'headings' => $headings,
+            'big_picture' => $sendData['image'],
+            'large_icon' => 'https://files.readme.io/3477f0a-small-favicon-32x32.png',
+            'data' => ['product_id' => $sendData['id'], 'products' => globalproductsonesignal($product->id)],
+        );
+        $fields = json_encode($fields);
+
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json; charset=utf-8',
+            'Authorization: Basic Yzc0M2UyZGItYjNiMi00MjZkLThjMzEtNGRjYWQxNDAyYmQz'
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+        $result = curl_exec($ch);
+        $data = json_decode($result);
+        curl_close($ch);
+        if (!empty($data->recipients) and $data->recipients >= 1) {
+            $response = '1';
+        } else {
+            $response = '0';
+        }
+        return $response;
     }
-    dd($response);
-    return $response;
-    }
-    else {
-    $product = Product::findOrFail($sendData['id']);
-    $product->imgs = $product->getImageAttribute()->mediumUrl;
-    $product->long_description = 'as';
-
-
-    $fields = array(
-        'app_id' => 'a12c1e7a-8260-4005-887b-e9df809b85e2',
-        // 'include_player_ids' => array($device_id),
-        'included_segments' => array('All'),
-        'contents' => $content,
-        'headings' => $headings,
-        'big_picture' => $sendData['image'],
-        'large_icon' => 'https://files.readme.io/3477f0a-small-favicon-32x32.png',
-        'data' => ['product_id' => $sendData['id'], 'products' => globalproductsonesignal($product->id)],
-    );
-    $fields = json_encode($fields);
-
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-        'Authorization: Basic Yzc0M2UyZGItYjNiMi00MjZkLThjMzEtNGRjYWQxNDAyYmQz'));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_HEADER, FALSE);
-    curl_setopt($ch, CURLOPT_POST, TRUE);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
-    $result = curl_exec($ch);
-    $data = json_decode($result);
-    curl_close($ch);
-    if (!empty($data->recipients) and $data->recipients >= 1) {
-        $response = '1';
-    } else {
-        $response = '0';
-    }
-    return $response;
-    }
-    
-
 }
 
 function onesignalNotificationToSpecificUser($sendData)
@@ -453,8 +450,10 @@ function onesignalNotificationToSpecificUser($sendData)
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-        'Authorization: Basic Yzc0M2UyZGItYjNiMi00MjZkLThjMzEtNGRjYWQxNDAyYmQz'));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json; charset=utf-8',
+        'Authorization: Basic Yzc0M2UyZGItYjNiMi00MjZkLThjMzEtNGRjYWQxNDAyYmQz'
+    ));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_HEADER, FALSE);
     curl_setopt($ch, CURLOPT_POST, TRUE);
@@ -470,5 +469,100 @@ function onesignalNotificationToSpecificUser($sendData)
         $response = '0';
     }
     return $response;
+}
 
+function getWarranty()
+{
+    $warrantyTypes = [
+        'one_week' => 'One Week',
+        'two_week' => 'Two Weeks',
+        'three_week' => 'Three Weeks',
+        'four_week' => 'Four Weeks',
+        'one_month' => 'One Month',
+        'two_month' => 'Two Months',
+        'three_month' => 'Three Months',
+        'four_month' => 'Four Months',
+        'five_month' => 'Five Months',
+        'six_month' => 'Six Months',
+        'seven_month' => 'Seven Months',
+        'eight_month' => 'Eight Months',
+        'nine_month' => 'Nine Month',
+        'ten_month' => 'Ten Month',
+        'eleven_month' => 'Eleven Month',
+        'one_year' => 'One Year',
+        'two_year' => 'Two Years',
+        'three_year' => 'Three Years',
+        'four_year' => 'Four Years',
+        'five_year' => 'Five Years'
+    ];
+    return $warrantyTypes;
+}
+function getWarrantyName($status)
+{
+    switch ($status) {
+        case 'one_week':
+            $name = "One Week";
+            break;
+        case 'two_week':
+            $name = "Two Weeks";
+            break;
+        case 'three_week':
+            $name = "Three Weeks";
+            break;
+        case 'four_week':
+            $name = "Four Weeks";
+            break;
+        case 'one_month':
+            $name = "One Month";
+            break;
+        case 'two_month':
+            $name = "Two Months";
+            break;
+        case 'three_month':
+            $name = "Three Months";
+            break;
+        case 'four_month':
+            $name = "Four Months";
+            break;
+        case 'five_month':
+            $name = "Five Months";
+            break;
+        case 'six_month':
+            $name = "Six Months";
+            break;
+        case 'seven_week':
+            $name = "Seven Months";
+            break;
+        case 'eight_month':
+            $name = "Eight Months";
+            break;
+        case 'nine_month':
+            $name = "Nine Months";
+            break;
+        case 'ten_month':
+            $name = "Ten Months";
+            break;
+        case 'eleven_month':
+            $name = "Eleven Months";
+            break;
+        case 'one_year':
+            $name = "One Year";
+            break;
+        case 'two_year':
+            $name = "Two Years";
+            break;
+        case 'three_year':
+            $name = "Three Years";
+            break;
+        case 'four_year':
+            $name = "Four Years";
+            break;
+        case 'five_year':
+            $name = "Five Years";
+            break;
+        default:
+            $name = "No Warranty";
+    }
+
+    return $name;
 }

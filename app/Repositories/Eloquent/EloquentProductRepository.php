@@ -21,27 +21,25 @@ class EloquentProductRepository extends AbstractRepository implements ProductRep
 
     public function store(array $attributes)
     {
-       
+
         $attributes['user_id'] = auth()->id();
         if (isset($attributes['prebooking'])) {
             if ($attributes['prebooking'] == 1 && ($attributes['stock_quantity'] == null || $attributes['stock_quantity'] == 0)) {
                 $attributes['stock'] = 0;
             }
         }
-           if (isset($attributes['approved'])) {
+        if (isset($attributes['approved'])) {
             $attributes['approved'];
-
         }
         if (isset($attributes['super_store_status'])) {
             $attributes['super_store_status'];
-
         }
         if (($attributes['stock_quantity'] == null || $attributes['stock_quantity'] == 0) && $attributes['stock'] == 1) {
             $attributes['stock'] = 0;
         }
-       
+
         $product = $this->entity->create($attributes);
-       
+
         if ($product) {
             if (isset($attributes['category_id'])) {
                 $product->categories()->attach($attributes['category_id']);
@@ -134,14 +132,13 @@ class EloquentProductRepository extends AbstractRepository implements ProductRep
                     ]);
                 }
             }
-
         }
         return $product;
     }
 
     public function deleteProduct($id)
     {
-               
+
         $product = $this->entity->find($id);
         $product->categories()->detach();
         $product->faqs()->delete();
@@ -150,7 +147,7 @@ class EloquentProductRepository extends AbstractRepository implements ProductRep
         $product->seos()->delete();
         $product->additionals()->delete();
         $product->images()->delete();
-                $product->negotiables()->delete();
+        $product->negotiables()->delete();
 
         // $negotiable = Negotaible::where('product_id', $id)->get();
 
@@ -160,10 +157,10 @@ class EloquentProductRepository extends AbstractRepository implements ProductRep
             ProductRelation::where('product_id', $product->main)->update(['product_id' => $relation->relation_id]);
         }
         $product->relation()->delete();
-//        $referral = StoreReferralLink::where('product_id', $id);
-//        if ($referral->get()->isnotEmpty()) {
-//            $referral->delete();
-//        }
+        //        $referral = StoreReferralLink::where('product_id', $id);
+        //        if ($referral->get()->isnotEmpty()) {
+        //            $referral->delete();
+        //        }
         $product->delete();
     }
 
@@ -188,7 +185,6 @@ class EloquentProductRepository extends AbstractRepository implements ProductRep
         }
         if (isset($attributes['super_store_status'])) {
             $attributes['super_store_status'];
-
         }
         if ($product->prebooking == 1 && !isset($attributes['prebooking'])) {
             $attributes['prebooking'] = 0;
@@ -218,7 +214,6 @@ class EloquentProductRepository extends AbstractRepository implements ProductRep
             if (count($exitingIds) > 0) {
                 ProductImage::destroy($exitingIds);
             }
-
         }
 
         if (isset($attributes['faqs'])) {
@@ -230,13 +225,13 @@ class EloquentProductRepository extends AbstractRepository implements ProductRep
             // Create faq
             foreach ($faqsKeys as $faq) {
                 $product->faqs()->updateOrCreate([
-                    'id' => $faq], [
+                    'id' => $faq
+                ], [
                     'product_id' => $product->id,
                     'question' => $question[$faq],
                     'answer' => $answer[$faq],
                 ]);
             }
-
         }
         if (isset($attributes['additionals'])) {
 
@@ -248,7 +243,8 @@ class EloquentProductRepository extends AbstractRepository implements ProductRep
             // Create specification
             foreach ($additionalsKey as $specification) {
                 $product->additionals()->updateOrCreate([
-                    'id' => $specification], [
+                    'id' => $specification
+                ], [
                     'product_id' => $product->id,
                     'quantity' => $quantity[$specification],
                     'size' => trim(strtoupper($sizes[$specification])),
@@ -276,7 +272,8 @@ class EloquentProductRepository extends AbstractRepository implements ProductRep
             // Create specification
             foreach ($specificationsKeys as $specification) {
                 $product->specifications()->updateOrCreate([
-                    'id' => $specification], [
+                    'id' => $specification
+                ], [
                     'product_id' => $product->id,
                     'title' => $titles[$specification],
                     'description' => $descriptions[$specification],
@@ -293,16 +290,15 @@ class EloquentProductRepository extends AbstractRepository implements ProductRep
             // Create specification
             foreach ($featuresKeys as $feature) {
                 $product->features()->updateOrCreate([
-                    'id' => $feature], [
+                    'id' => $feature
+                ], [
                     'product_id' => $product->id,
                     'feature' => $feature_titles[$feature],
                 ]);
             }
         }
+        $product->update($attributes);
 
-     $product->update($attributes);
-         
-    
 
         return $product;
     }

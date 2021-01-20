@@ -51,28 +51,23 @@ class HomeController extends Controller
 
     public function couponCheck(Request $request)
     {
-
         $val = $request->input('coupon_code');
         if (session()->exists('coupon')) {
-            return redirect()->back()->with('success', 'Coupon has already applied!');
+            return redirect()->back()->with('error', 'Coupon has already applied!');
         }
         if ($val != null) {
             $coupon = Coupon::where('code', $val)->first();
             if (!$coupon) {
                 return redirect()->back()->with('error', 'Coupon Does not exist!');
-
             } else {
                 if (OrderProduct::where('coupon_id', $coupon->id)->get()->count() >= $coupon->uses_per_coupon) {
                     return redirect()->back()->with('error', 'Coupon Maximum Limit Exceeded!');
-
                 }
                 if (Carbon::now()->toDateString() < $coupon->start_date) {
                     return redirect()->back()->with('error', 'Coupon Not Started Yet!');
-
                 }
                 if (Carbon::now()->toDateString() > $coupon->end_date) {
                     return redirect()->back()->with('error', 'Coupon Expired!');
-
                 }
                 $coupon_product = CouponProduct::where('coupon_id', $coupon->id)->whereIn('product_id', $request->product_id)->get();
                 if ($coupon_product->count() > 0) {
@@ -83,41 +78,47 @@ class HomeController extends Controller
                         'discount_value' => $coupon->discount_value
                     ]);
                     return redirect()->back()->with('success', 'Your Coupon code is valid.' . ' You got Discount of Rs' . $coupon->discount_value . '!');
-
                 } else {
                     return redirect()->back()->with('error', 'This Coupon Does not Applied to This Product!');
                 }
-
             }
         } else {
             return redirect()->back()->with('error', 'Field is empty!');
-
         }
-
     }
-    public function couponCheckAjax(Request $request){
+    public function couponCheckAjax(Request $request)
+    {
         $val = $request->input('coupon_code');
-        echo $val;
-        exit(); 
+                
+        if ($val == null) {
+            return response()->json(['status' => 'error', 'message' => 'Field is empty!']);
+            // return redirect()->back()->with('error', 'Field is empty!');
+
+        } 
         if (session()->exists('coupon')) {
-            return redirect()->back()->with('success', 'Coupon has already applied!');
+            return response()->json(['status' => 'error', 'message' => 'Coupon has already applied!']);
         }
-        if ($val != null) {
+        if ($val != null)  {
+
             $coupon = Coupon::where('code', $val)->first();
             if (!$coupon) {
-                return redirect()->back()->with('error', 'Coupon Does not exist!');
+                return response()->json(['status' => 'error', 'message' => 'Coupon Does not exist!']);
+                // return redirect()->back()->with('error', 'Coupon Does not exist!');
 
             } else {
                 if (OrderProduct::where('coupon_id', $coupon->id)->get()->count() >= $coupon->uses_per_coupon) {
-                    return redirect()->back()->with('error', 'Coupon Maximum Limit Exceeded!');
+                    return response()->json(['status' => 'error', 'message' => 'Coupon Maximum Limit Exceeded!']);
+                    // return redirect()->back()->with('error', 'Coupon Maximum Limit Exceeded!');
 
                 }
                 if (Carbon::now()->toDateString() < $coupon->start_date) {
-                    return redirect()->back()->with('error', 'Coupon Not Started Yet!');
+                    return response()->json(['status' => 'error', 'message' => 'Coupon Not Started Yet!']);
+                    // return redirect()->back()->with('error', 'Coupon Not Started Yet!');
 
                 }
                 if (Carbon::now()->toDateString() > $coupon->end_date) {
-                    return redirect()->back()->with('error', 'Coupon Expired!');
+                    return response()->json(['status' => 'error', 'message' => 'Coupon Expired!']);
+                    // return redirect()->back()->with('error', 'Coupon Expired!');
 
                 }
                 $coupon_product = CouponProduct::where('coupon_id', $coupon->id)->whereIn('product_id', $request->product_id)->get();
@@ -128,16 +129,14 @@ class HomeController extends Controller
                         'code' => $coupon->code,
                         'discount_value' => $coupon->discount_value
                     ]);
-                    return redirect()->back()->with('success', 'Your Coupon code is valid.' . ' You got Discount of Rs' . $coupon->discount_value . '!');
+                    return response()->json(['status' => 'success', 'message' => 'Your Coupon code is valid.' . ' You got Discount of Rs' . $coupon->discount_value . '!']);
+                    // return redirect()->back()->with('success', 'Your Coupon code is valid.' . ' You got Discount of Rs' . $coupon->discount_value . '!');
 
                 } else {
-                    return redirect()->back()->with('error', 'This Coupon Does not Applied to This Product!');
+                    return response()->json(['status' => 'error', 'message' => 'This Coupon Does not Applied to This Product!']);
+                    // return redirect()->back()->with('error', 'This Coupon Does not Applied to This Product!');
                 }
-
             }
-        } else {
-            return redirect()->back()->with('error', 'Field is empty!');
-
         }
     }
 
@@ -165,9 +164,12 @@ class HomeController extends Controller
             } else {
                 $user->verified = 1;
                 $user->update();
-                return view('emailconfirm', [
+                return view(
+                    'emailconfirm',
+                    [
                         'message' => 'Your Account is Verified Successfully',
-                        'success' => 'success']
+                        'success' => 'success'
+                    ]
                 );
             }
         } else {

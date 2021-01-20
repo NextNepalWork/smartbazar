@@ -211,17 +211,23 @@
                                        </p>
                                    @endif
                                </div> --}}
-                                <div class="product-price-container">
+                               <div class="row">
+                                <div class="product-price-container col-md-5 col-12">
                                     <!--<span class="d-block">Special price</span>-->
                                     <p class="price">
-                                    <span class="Price-amount amount">
-                                        <span class="Price-currencySymbol">Rs.</span>{{ $product->sale_price ? $product->sale_price : $product->product_price }}
-                                    </span>
-                                        @if(isset($product->product_price))
+                                    
+                                        @if($product->product_price == $product->sale_price)
+                                            <span class="Price-amount amount">
+                                                <span class="Price-currencySymbol">Rs&nbsp;</span>{{ number_format($product->product_price) }}
+                                            </span>
+                                        @else
                                             <span class="Price-amount discount">
-                                        <span class="Price-currencySymbol">Rs.</span>{{ $product->product_price ? $product->product_price : '' }}
-                                    </span>
-                                    @endif
+                                                <span class="Price-currencySymbol">Rs&nbsp;</span>{{ number_format($product->product_price) }}
+                                            </span>
+                                            <span class="Price-amount amount">
+                                                <span class="Price-currencySymbol">Rs&nbsp;</span>{{ number_format($product->sale_price) }}
+                                            </span>
+                                        @endif
                                     @php
                                         $discount = round(($product->product_price-$product->sale_price)/$product->product_price*100,0);
 
@@ -240,6 +246,14 @@
                                         </p>
 
 
+                                </div>
+                                @if(isset($product->product_warranty))
+                                        <div class="col-md-7 col-12 mt-2 pl-md-2 pl-0">
+                                            <h5 class="pb-1" style="border-bottom: 1px solid #ddd;font-weight: 600;
+                                            font-size: 20px;">Product Warranty</h5>
+                                            <p class="pt-1"><span class="text-muted">This product has warranty of {{ getWarrantyName($product->product_warranty)}} <span></p>
+                                        </div>
+                                @endif
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -275,24 +289,28 @@
                                         </ul>
                                     </div>
                                 @endif
-                                <div class="delivery_address d-flex align-items-center py-2">
-                                    <h5> Delivery</h5>:&nbsp;
-                                    <div class="delivery_location">
-                                        {{-- <form action="" class="d-flex flex-wrap">
-                                            <i class="fas fa-map-marker-alt"></i>
-                                            <input type="text">
-                                            <button type="submit" style="color:white; background:#f25548; padding: 5px; border:none; margin:5px 0; cursor: pointer;">
-                                                find now
-                                            </button>
-                                        </form> --}}
-                                        <p>Usually delivered in {{ $product->from }}-{{ $product->to }} days</p>
+                                <div class="row">
+                                    <div class="delivery_address d-flex align-items-center py-2">
+                                        <h5> Delivery</h5>:&nbsp;
+                                        <div class="delivery_location">
+                                            {{-- <form action="" class="d-flex flex-wrap">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <input type="text">
+                                                <button type="submit" style="color:white; background:#f25548; padding: 5px; border:none; margin:5px 0; cursor: pointer;">
+                                                    find now
+                                                </button>
+                                            </form> --}}
+                                            <p>Usually delivered in {{ $product->from }}-{{ $product->to }} days</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="select_quantity py-3">
-                                    <h1>Quantity :</h1>
-                                    <input class="form" type="number" id="quantity" name="quantity" min="1"
-                                           max="{{ $product->stock_quantity }}"
-                                           placeholder="1">
+                                <div class="select_quantity py-3 row">
+                                    <div class="form-froup">
+                                        <label for="quantity"><h1>Quantity :</h1></label>
+                                        <input class="form" type="number" id="quantity" name="quantity" min="1"
+                                            max="{{ $product->stock_quantity }}"
+                                            placeholder="1">
+                                    </div>
                                 </div>
                             @endif
                             {{-- <div class="product-quantity quantity d-flex align-items-center py-2">
@@ -396,36 +414,50 @@
                             </div>
                             @if($product->negotiable == 1)
                                 <div class="bargain mb py-3 border-top ">
-                                    <div class="heading  pb-2 mb-2">
-                                        <h3>Bargain With Seller</h3>
-                                        <p class="text-muted"> You Offer your price to this items</p>
-                                    </div>
-                                    <form action="{{route('negotiable.create')}}" class="d-flex" method="post">
-                                        {{csrf_field()}}
-                                        <input type="hidden" name="product_id" value="{{$product->id}}">
-                                        {{--<input type="hidden" name="fixed_price" value="{{$product->sale_price}}">--}}
-
-
-                                        {{--<input type="number" id="bargain"--}}
-                                        {{--class="form-control input-text uk-input w-75 text d-inline-block"--}}
-                                        {{--name="bargain_price" title=""--}}
-                                        {{--placeholder="enter Price lower than item">--}}
-                                        @if(\Illuminate\Support\Facades\Auth::check())
-                                        
-                                        <button type="submit" class="btn view-cart">
-                                            <span class="mr-2"><svg xmlns="http://www.w3.org/2000/svg"
-                                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="21.68"
-                                                                    height="19.973" viewBox="0 0 800 737">
-                                            <image width="800" height="737"
-                                                    xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAUCAYAAACJfM0wAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAB3RJTUUH5AIFDDYfARE1ggAABKNJREFUOMuNVEtoXVUUXeec+3nvvl/ykjapDf3FUghalKL0MxALVlsEHYgiigMHFnWiaEFasApVCxVbUUFwpjMnVmkVHIlFoRZMJ9oWaiyxMaR5L/e+++7v3PPZDtLENi3igjM57LP2Zu2zFogI1lokSYIwDBHH/ZGy1MeNpQ7dAEtExtC1stTH+v1k1WJtDGstiOiWw4gIxhgURcF9v3LKccRewELJ6HddZt8bFU4DgPCH1ztO5RHXa24BE1DafFnk2VNBEEAIgZVg1ydexzi/wGCDfvjHwSLtvmdMDjABYTsACOSOwZocgnuoNkbfrrc2vknE5onsBOe8cwuxMcbjnIeApvmr5+6QxULsV1rg3AUXHDB9kDWAMwQiBaslShmjWhte215z31VATFlrxznnNxFzAj8BUFCEZycczMWe50NrCd8zGBzwQWSQFwWYXUCrloPzEpwLCEQzOjl/D4BNxrI3sixDURTI8xxZloEREcn0ytdp9+zj1UoFxtn4GJyR3Q7NHq24+Wwqg32WDT2E8vLRqtubk2zz48RaOz02faTM52K/tWOSeSOrooXOGOccWmsIIeAAgEymzqmiC7+xa1t9cOtJAChT2QyjSy8OrNnxDWMQZUZens0cbgxPfAUAMqW1WRE947f4rw7H8wCQ5zlarRaq1So4ADj+SJvEEKxFviy+4xeOWy0AIwGAca9g3Ev/FbGRElwAehiATpIEWZYxx3EE5xxMG5qCiWx87ec7GwOjUKa5vZBsW1DzPvcD3o87c9uUqdzfqNkvvPpQkkTZ9qIo7w6q9jMHPTi1rQRRP93tzD9ar9dPu647wxh7gZXKvOQ6/JOy98uDSnZ/KMwQ8kJjYLCNeqOJazO/Ic8kVo2OoRKMIOzOIInn0aiVaI/cewTuukNK6wmt1IVKpRIxxlpa6yeZMQac84uA2dKZObve6ni61Wojl4RSpqjWVoOJCrL4L4D50DoDZ4Rme/NbQXPDYQAfGGNeI6KDjuO8AwBa6zPXDUIDjLFLAK0ukiuvCPv3h2mmIIsCzfYmcOEjnL+ISjDaEG7liVpz7H3h1Npa6xNKqVc9z9sphPhpSX4iWoDWGmUpEUURtKHzugzD2amTSKLLz1kjyZpCWSMjozO7nBuW/kySZFO320Ucx7uttXRTrlgbOmVZLi6ZcxAQWZVcbQxueb3WGj9mDCYBe4aAwbLEjNHpd8aoH40xEEKgVqt97Pv+yyvtbK29DKUUlFLQWt+12E4REZGU5cHp6Wl0Oh2EYYjZ2Vl0Oh0vSZK9UsqTK6e8EWVZ7odSCmVZwlr7KRGR1ubbJEnGe70e0jRFnufHtdb0f6GU+sgYAxhjQEQoimJrr9cbj+MYURQhTVMQEdI0RZZlB4joP9mttdTr9Z7u9/uw1oJZa8EYQ57nyPMcvu/DWgshBIIgQJZlkFKCc86FEPtc133AGLOm1+ul7XZ7g+/7e67/BIRhOA5gSgiB5axjjGFl9C27d/HeSilP5Xl+oNvtPjs5Obk/DMOHrbXvLr2v1+t7Pc+D4zi4PdNtsNRYCAHHcVCtViGEQJZlh9I03UVEUgixZ6n+H1RgXlwUutOSAAAAAElFTkSuQmCC"/>
-                                            </svg></span>
-                                                Bargain
-                                        </button>
-                                        @else
-                                        <a href="/login" class="btn btn-sm btn-primary">Please Login First</a>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-12">
+                                            <div class="heading  pb-2 mb-2">
+                                                <h3>Bargain With Seller</h3>
+                                                <p class="text-muted"> You Offer your price to this items</p>
+                                            </div>
+                                            <form action="{{route('negotiable.create')}}" class="d-flex" method="post">
+                                                {{csrf_field()}}
+                                                <input type="hidden" name="product_id" value="{{$product->id}}">
+                                                {{--<input type="hidden" name="fixed_price" value="{{$product->sale_price}}">--}}
+        
+        
+                                                {{--<input type="number" id="bargain"--}}
+                                                {{--class="form-control input-text uk-input w-75 text d-inline-block"--}}
+                                                {{--name="bargain_price" title=""--}}
+                                                {{--placeholder="enter Price lower than item">--}}
+                                                @if(\Illuminate\Support\Facades\Auth::check())
+                                                
+                                                <button type="submit" class="btn view-cart">
+                                                    <span class="mr-2"><svg xmlns="http://www.w3.org/2000/svg"
+                                                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="21.68"
+                                                                            height="19.973" viewBox="0 0 800 737">
+                                                    <image width="800" height="737"
+                                                            xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAUCAYAAACJfM0wAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAB3RJTUUH5AIFDDYfARE1ggAABKNJREFUOMuNVEtoXVUUXeec+3nvvl/ykjapDf3FUghalKL0MxALVlsEHYgiigMHFnWiaEFasApVCxVbUUFwpjMnVmkVHIlFoRZMJ9oWaiyxMaR5L/e+++7v3PPZDtLENi3igjM57LP2Zu2zFogI1lokSYIwDBHH/ZGy1MeNpQ7dAEtExtC1stTH+v1k1WJtDGstiOiWw4gIxhgURcF9v3LKccRewELJ6HddZt8bFU4DgPCH1ztO5RHXa24BE1DafFnk2VNBEEAIgZVg1ydexzi/wGCDfvjHwSLtvmdMDjABYTsACOSOwZocgnuoNkbfrrc2vknE5onsBOe8cwuxMcbjnIeApvmr5+6QxULsV1rg3AUXHDB9kDWAMwQiBaslShmjWhte215z31VATFlrxznnNxFzAj8BUFCEZycczMWe50NrCd8zGBzwQWSQFwWYXUCrloPzEpwLCEQzOjl/D4BNxrI3sixDURTI8xxZloEREcn0ytdp9+zj1UoFxtn4GJyR3Q7NHq24+Wwqg32WDT2E8vLRqtubk2zz48RaOz02faTM52K/tWOSeSOrooXOGOccWmsIIeAAgEymzqmiC7+xa1t9cOtJAChT2QyjSy8OrNnxDWMQZUZens0cbgxPfAUAMqW1WRE947f4rw7H8wCQ5zlarRaq1So4ADj+SJvEEKxFviy+4xeOWy0AIwGAca9g3Ev/FbGRElwAehiATpIEWZYxx3EE5xxMG5qCiWx87ec7GwOjUKa5vZBsW1DzPvcD3o87c9uUqdzfqNkvvPpQkkTZ9qIo7w6q9jMHPTi1rQRRP93tzD9ar9dPu647wxh7gZXKvOQ6/JOy98uDSnZ/KMwQ8kJjYLCNeqOJazO/Ic8kVo2OoRKMIOzOIInn0aiVaI/cewTuukNK6wmt1IVKpRIxxlpa6yeZMQac84uA2dKZObve6ni61Wojl4RSpqjWVoOJCrL4L4D50DoDZ4Rme/NbQXPDYQAfGGNeI6KDjuO8AwBa6zPXDUIDjLFLAK0ukiuvCPv3h2mmIIsCzfYmcOEjnL+ISjDaEG7liVpz7H3h1Npa6xNKqVc9z9sphPhpSX4iWoDWGmUpEUURtKHzugzD2amTSKLLz1kjyZpCWSMjozO7nBuW/kySZFO320Ucx7uttXRTrlgbOmVZLi6ZcxAQWZVcbQxueb3WGj9mDCYBe4aAwbLEjNHpd8aoH40xEEKgVqt97Pv+yyvtbK29DKUUlFLQWt+12E4REZGU5cHp6Wl0Oh2EYYjZ2Vl0Oh0vSZK9UsqTK6e8EWVZ7odSCmVZwlr7KRGR1ubbJEnGe70e0jRFnufHtdb0f6GU+sgYAxhjQEQoimJrr9cbj+MYURQhTVMQEdI0RZZlB4joP9mttdTr9Z7u9/uw1oJZa8EYQ57nyPMcvu/DWgshBIIgQJZlkFKCc86FEPtc133AGLOm1+ul7XZ7g+/7e67/BIRhOA5gSgiB5axjjGFl9C27d/HeSilP5Xl+oNvtPjs5Obk/DMOHrbXvLr2v1+t7Pc+D4zi4PdNtsNRYCAHHcVCtViGEQJZlh9I03UVEUgixZ6n+H1RgXlwUutOSAAAAAElFTkSuQmCC"/>
+                                                    </svg></span>
+                                                        Bargain
+                                                </button>
+                                                @else
+                                                <a href="/login" class="btn btn-sm btn-primary">Please Login First</a>
+                                                @endif
+                                            </form>
+                                            <span class="text-danger">{{ $errors->first('bargain_price') }}</span>
+                                        </div>
+                                        @if(isset($shipping_account) && !empty($shipping_account))
+                                        <div class="col-sm-6 col-12 mt-sm-0 mt-2">
+                                            <h3 class="pb-1" style="border-bottom: 1px solid #ddd;font-weight: 600;
+                                            font-size: 20px;">Shipping Address</h3>
+                                            <p class="pt-1">Name: <span class="text-muted">{{ $shipping_account->first_name.' '.$shipping_account->last_name }}</span></p>
+                                            <p class="pt-1">Email: <span class="text-muted">{{ $shipping_account->email }}</span></p>
+                                            <p class="pt-1">District: <span class="text-muted">{{ $shipping_account->district }}</span></p>
+                                            <p class="pt-1">Area: <span class="text-muted">{{ $shipping_account->area }}</span></p>
+                                        </div>
                                         @endif
-                                    </form>
-                                    <span class="text-danger">{{ $errors->first('bargain_price') }}</span>
+                                    </div>
 
                                 </div>
                             @endif

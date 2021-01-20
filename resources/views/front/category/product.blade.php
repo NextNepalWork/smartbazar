@@ -25,31 +25,30 @@
                         </div>
                         <div class="product-meta-container">
                             <div class="product-price-container">
-                    <span class="price">
-                        @if($product->sale_price == $product->product_price)
-                        <span class="Price-amount amount">
-                                <span class="Price-currencySymbol">Rs</span>{{ number_format($product->sale_price) }}</span>
-                       <!--  <span class="Price-amount discount">
-                            <span class="Price-currencySymbol">Rs</span>
-                            {{ number_format($product->product_price) }}
-                        </span> -->
-                        @else
-                        <span class="Price-amount amount">
-                                <span class="Price-currencySymbol">Rs</span>{{ number_format($product->sale_price) }}</span>
-                        <span class="Price-amount discount">
-                            <span class="Price-currencySymbol">Rs</span>{{ number_format($product->product_price) }}
-                        </span>
-                        @endif
-
-
-                    </span>   
+                                <span class="price">
+                                    @if($product->sale_price == $product->product_price)
+                                    <span class="Price-amount amount">
+                                            <span class="Price-currencySymbol">Rs&nbsp;</span>{{ number_format($product->sale_price) }}</span>
+                                    {{-- <span class="Price-amount discount">
+                                        <span class="Price-currencySymbol">Rs</span>
+                                        {{ number_format($product->product_price) }}
+                                    </span> --}}
+                                    @else
+                                    <span class="Price-amount discount">
+                                        <span class="Price-currencySymbol">Rs&nbsp;</span>{{ number_format($product->product_price) }}
+                                    </span>
+                                    <span class="Price-amount amount">
+                                            <span class="Price-currencySymbol">Rs&nbsp;</span>{{ number_format($product->sale_price) }}</span>
+                                    
+                                    @endif
+                                </span>   
                                 <div class="save-upto">
                                     @if($product->product_price>$product->sale_price)
                                         @php
                                             $discount = $product->product_price-$product->sale_price;
                                             $discount_percentage = $discount/$product->product_price*100;
                                         @endphp
-                                        <span class="product-label discount">-{{ number_format($discount_percentage)}}%</span>
+                                        <span class="product-label discount">-{{ number_format($discount_percentage,2)}}%</span>
                                         @else
                                         <span class="product-label discount"></span>
 

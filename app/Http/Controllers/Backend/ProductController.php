@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Backend;
+
 use App\Http\Requests\ProductEditRequest;
 
 use App\Helpers\Image\ImageService;
@@ -39,7 +40,7 @@ class ProductController extends Controller
 
     public function getProductCreate()
     {
-        $products = Product::where('main', 1)->where('status','!=','deleted')->pluck('name', 'id')->toArray();
+        $products = Product::where('main', 1)->where('status', '!=', 'deleted')->pluck('name', 'id')->toArray();
 
         return view('admin.products.existing', compact('products'));
     }
@@ -48,13 +49,14 @@ class ProductController extends Controller
     {
         $brands = Brand::where('status', 1)->get();
         $categorys = Category::where('parent_id', 0)->get();
+        $warranty_types = getWarranty();
 
-        return view('admin.products.newproduct', compact('brands', 'categorys'));
+        return view('admin.products.newproduct', compact('brands', 'categorys', 'warranty_types'));
     }
 
     public function createExistingProduct(Request $request)
     {
-       
+
         $request->validate(['product' => 'required']);
         $brands = Brand::where('status', 1)->get();
         $categorys = Category::where('parent_id', 0)->get();
@@ -103,27 +105,23 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-      
-       /*dd($request->all());*/
+
+        /*dd($request->all());*/
         try {
-            if(isset($request->existing))
-            {
+            if (isset($request->existing)) {
                 $request['main'] = 0;
-            }
-            else
-            {
+            } else {
                 $request['main'] = 1;
             }
 
             $product = $this->productRepository->store($request->all());
 
             ProductRelation::create([
-                    'product_id' => $request->existing ? $request->existing : $product->id,
-                    'relation_id' => $product->id
-                ]);
+                'product_id' => $request->existing ? $request->existing : $product->id,
+                'relation_id' => $product->id
+            ]);
 
-            $sendData = array
-            (
+            $sendData = array(
                 'body'  => 'New Product in SmartBazaar! Hurry Up!!',
                 'title' => 'New Product in SmartBazaar',
                 'icon'  => 'myicon',/*Default Icon*/
@@ -133,11 +131,9 @@ class ProductController extends Controller
             );
             $response = onesignalNotification($sendData);
 
-            if(isset($request->existing))
-            {
+            if (isset($request->existing)) {
                 return redirect()->route('admin.products.create')->with('success', 'Product Successfully Added.');
             }
-
         } catch (Exception $e) {
 
             throw new Exception('Error in saving product: ' . $e->getMessage());
@@ -145,16 +141,15 @@ class ProductController extends Controller
         return redirect()->back()->with('success', 'Product Successfully Added.');
     }
 
-  public function delete($id)
+    public function delete($id)
     {
         $product = Product::find($id);
         $product->update([
             'status' => 'deleted'
         ]);
-$this->deleteAndRemove($id);
-//        return redirect()->back()->with('success', 'Product moved to deleted.');
+        $this->deleteAndRemove($id);
+        //        return redirect()->back()->with('success', 'Product moved to deleted.');
         return redirect()->back()->with('success', 'Product Successfully Deleted.');
-
     }
 
     public function deleteAndRemove($id)
@@ -182,14 +177,15 @@ $this->deleteAndRemove($id);
         $product = Product::find($id);
         $brands = Brand::where('status', 1)->get();
         $categories = Category::where('parent_id', 0)->get();
-        return view('admin.products.edit', compact('product', 'brands', 'categories'));
+        $warranty_types = getWarranty();
+        return view('admin.products.edit', compact('product', 'brands', 'categories', 'warranty_types'));
     }
 
     public function update(ProductEditRequest $request)
     {
         try {
             $oldApproved = Product::find($request->id);
-            
+
             if ($oldApproved->approved == 0 && $request->approved == 1) {
                 $this->productRepository->updateProducts($request->id, $request->all());
                 $user = User::find($oldApproved->user_id);
@@ -201,30 +197,25 @@ $this->deleteAndRemove($id);
                 ];
 
                 \Mail::to($user->email)->send(new AlertVendor($emailData));
-
             } else {
                 $product = $this->productRepository->updateProducts($request->id, $request->all());
-
             }
 
             if ($oldApproved->stock == 0 && $oldApproved->stock_quantity == 0 && $request->stock_quantity > 0) {
                 StockNotify::dispatch($oldApproved)->delay(now()->addSeconds(5));
             }
 
-  if(isset($product)){
-          $sendData = array
-            (
-                'body'  => 'New Product in SmartBazaar! Hurry Up!!',
-                'title' => 'New Product in SmartBazaar',
-                'icon'  => 'myicon',/*Default Icon*/
-                'sound' => 'mySound',/*Default sound*/
-                'image' => $product->getImageAttribute()->mediumUrl,
-                'id' => $product->id,
-            );
-            $response = onesignalNotification($sendData);
-}
-
-
+            if (isset($product)) {
+                $sendData = array(
+                    'body'  => 'New Product in SmartBazaar! Hurry Up!!',
+                    'title' => 'New Product in SmartBazaar',
+                    'icon'  => 'myicon',/*Default Icon*/
+                    'sound' => 'mySound',/*Default sound*/
+                    'image' => $product->getImageAttribute()->mediumUrl,
+                    'id' => $product->id,
+                );
+                $response = onesignalNotification($sendData);
+            }
         } catch (Exception $e) {
 
             throw new Exception('Error in updating product: ' . $e->getMessage());
@@ -253,7 +244,7 @@ $this->deleteAndRemove($id);
         $image = $imageService->upload($image, $checkDirectory);
 
         $tmp = $this->_getTmpString();
-// dd($image);
+        // dd($image);
         return view('admin.products.upload-image')
             ->with('image', $image)
             ->with('tmp', $tmp);
@@ -269,7 +260,7 @@ $this->deleteAndRemove($id);
     public function deleteImage(Request $request)
     {
         $collection = ProductImage::where('path', $request->input('path'))->get(['id']);
-//dd($collection);
+        //dd($collection);
         ProductImage::destroy($collection->toArray());
 
         return response()->json([
@@ -313,11 +304,11 @@ $this->deleteAndRemove($id);
         }
 
         return response()->json($formattedProducts, 200);
-
     }
 
 
-    public function updateStatus($id){
+    public function updateStatus($id)
+    {
         $product = Product::findOrFail($id);
         $product;
         if ($product->approved == '1') {
@@ -327,53 +318,53 @@ $this->deleteAndRemove($id);
         }
         $product->update();
         return response()->json('status updated');
-
     }
 
-    public function deleteFaq( Request $request ) {
-        $faq = ProductFaq::findOrFail( $request->input( 'faq' ) );
+    public function deleteFaq(Request $request)
+    {
+        $faq = ProductFaq::findOrFail($request->input('faq'));
 
         $faq->delete();
 
-        return response()->json( [
+        return response()->json([
             'success' => true,
             'message' => 'Faq successfully deleted!!'
-        ] );
+        ]);
     }
 
-    public function deleteSpecification( Request $request ) {
-        $specification = ProductSpecifaction::findOrFail( $request->input( 'specification' ) );
+    public function deleteSpecification(Request $request)
+    {
+        $specification = ProductSpecifaction::findOrFail($request->input('specification'));
 
         $specification->delete();
 
-        return response()->json( [
+        return response()->json([
             'success' => true,
             'message' => 'Specification successfully deleted!!'
-        ] );
+        ]);
     }
 
-    public function deleteFeature( Request $request ) {
-        $feature = ProductFeature::findOrFail( $request->input( 'feature' ) );
+    public function deleteFeature(Request $request)
+    {
+        $feature = ProductFeature::findOrFail($request->input('feature'));
 
         $feature->delete();
 
-        return response()->json( [
+        return response()->json([
             'success' => true,
             'message' => 'Feature successfully deleted!!'
-        ] );
+        ]);
     }
 
-    public function deleteColor( Request $request ) {
-        $color = ProductAdditional::findOrFail( $request->input( 'color' ) );
+    public function deleteColor(Request $request)
+    {
+        $color = ProductAdditional::findOrFail($request->input('color'));
 
         $color->delete();
 
-        return response()->json( [
+        return response()->json([
             'success' => true,
             'message' => 'Color successfully deleted!!'
-        ] );
-    
+        ]);
     }
-    
-
 }

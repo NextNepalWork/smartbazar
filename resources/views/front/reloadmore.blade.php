@@ -41,17 +41,20 @@
                 </div>
                 <div class="product-meta-container">
                     <div class="product-price-container">
-                                <span class="price">
-
-                                        <span class="Price-amount discount">
-                                            <span class="Price-currencySymbol">Rs</span>{{ number_format($product->product_price) }}
-                                        </span>
-
-
-                                        <span class="Price-amount amount">
-                                            <span class="Price-currencySymbol">Rs</span>{{ number_format($product->sale_price) }}</span>
-
+                        <span class="price">
+                            @if($product->product_price == $product->sale_price)
+                                <span class="Price-amount amount">
+                                    <span class="Price-currencySymbol">Rs&nbsp;</span>{{ number_format($product->product_price) }}
                                 </span>
+                            @else
+                                <span class="Price-amount discount">
+                                    <span class="Price-currencySymbol">Rs&nbsp;</span>{{ number_format($product->product_price) }}
+                                </span>
+                                <span class="Price-amount amount">
+                                    <span class="Price-currencySymbol">Rs&nbsp;</span>{{ number_format($product->sale_price) }}
+                                </span>
+                            @endif
+                        </span>
                     </div>
                 </div>
             </div>

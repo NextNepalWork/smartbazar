@@ -58,7 +58,8 @@ class Product extends Model
         'main',
         'color',
         'prebooking',
-        'super_store_status'
+        'super_store_status',
+        'product_warranty'
     ];
 
 

@@ -553,12 +553,30 @@
                                                 </div>
 
                                             </div>
-                                            <div class="form-group col-md-6 sale--inline">
+                                            {{-- <div class="form-group col-md-6 sale--inline">
                                                 <label class="uk-form-label" for="form-horizontal-text">Image</label>
 
                                                 @include('merchant.product.images')
+                                            </div> --}}
+
+                                        </div>
+
+                                        
+                                        <div class="row">
+                                            <div class="form-group col-md-6 sale--inline">
+                                                <label class="uk-form-label" for="form-horizontal-text">Image</label>
+                                                @include('merchant.product.images')
                                             </div>
 
+                                            <div class="form-group col-md-6">
+                                                <label class="uk-form-label" for="form-horizontal-text">Select Warranty</label>
+                                                <select name="product_warranty" class="form-control">
+                                                    <option value="" selected>-- Select Warranty --</option>
+                                                    @foreach($warranty_types as $warranty_key => $warranty_type)
+                                                    <option value="{{ $warranty_key }}">{{ $warranty_type }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                         {{--&nbsp;<span uk-icon="info" uk-tooltip="title:dfsfdsafdafdsfsd dsfsdfds dfsd fsd; delay: 500;pos:right"></span>--}}
                                         <div class="title">Negotiable</div>

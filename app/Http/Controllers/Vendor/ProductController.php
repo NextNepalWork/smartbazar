@@ -49,8 +49,9 @@ class ProductController extends Controller
     {
         $brands = Brand::where('status', 1)->get();
         $categorys = Category::where('parent_id', 0)->get();
+        $warranty_types = getWarranty();
 
-        return view('merchant.product.newproduct', compact('brands', 'categorys'));
+        return view('merchant.product.newproduct', compact('brands', 'categorys','warranty_types'));
     }
 
     public function createExistingProduct(Request $request)
@@ -181,7 +182,8 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $brands = Brand::where('status', 1)->get();
         $categorys = Category::where('parent_id',0)->get();
-        return view('merchant.product.edit', compact('product', 'brands', 'categorys'));
+        $warranty_types = getWarranty();
+        return view('merchant.product.edit', compact('product', 'brands', 'categorys','warranty_types'));
     }
 
     public function update(Request $request)

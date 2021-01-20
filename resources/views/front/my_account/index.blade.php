@@ -194,7 +194,8 @@
                                             <table class="table table-bordered table-condensed" id="usersOrderTable">
                                                 <thead>
                                                 <tr>
-                                                    <th>ORDERS#</th>
+                                                    <th>ORDERS</th>
+                                                    <th>PRODUCTS</th>
                                                     <th>DATE</th>
                                                     <th>ORDER TOTAL</th>
                                                     <th>ORDER STATUS</th>
@@ -207,6 +208,12 @@
                                                     @if(empty($order->prebookings) || (isset($order->prebookings) && $order->prebookings->status == 1))
                                                         <tr>
                                                             <td>{{$order->id}}</td>
+                                                            <td>@php
+                                                                foreach ($order->products as $product){
+                                                                echo $product->name.",<br>";                                                                          
+                                                                }
+                                                                @endphp
+                                                            </td>
                                                             <td>{{ \Carbon\Carbon::parse($order->order_date)->format('F j, Y')}}</td>
 
                                                             <td>
