@@ -28,13 +28,14 @@ class DealController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $this->validate($request, [
             'name' => 'required'
         ]);
 
     	$deal = new Deal;
     	$deal->name = $request->input('name');
+    	$deal->end_date = $request->input('end_date');
     	$deal->save();
     	return redirect()->back()->with('success', 'Deal Successfully Added');
     }
@@ -53,6 +54,7 @@ class DealController extends Controller
 
     	$deals = Deal::findOrFail($request->id);
     	$deals->name = $request->input('name');
+    	$deals->end_date = $request->input('end_date');
     	$deals->update();
     	return redirect(route('admin.deals.index'))->with('success', 'Deal Successfully Updated');
     }

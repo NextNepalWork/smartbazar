@@ -109,7 +109,8 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <a href="{{ route('category', ['slug' => $value->name]) }}" class="float-right view-more">view more<span class="ml-2" uk-icon="forward"></span></a>
+                                {{-- <a href="{{ route('category', ['slug' => $value->name]) }}" class="float-right view-more">view more<span class="ml-2" uk-icon="forward"></span></a> --}}
+                                <a href="javascript:;" class="float-right view-more">view more<span class="ml-2" uk-icon="forward"></span></a>
                                 <div class="clearfix"></div>
                             </div>
 
@@ -283,7 +284,7 @@
                 <div class="row mall-carousel owl-carousel justify-content-between ">
                     @foreach($mall as $value)
                         <div class="welcome_mall-item relative">
-                            <a href="{{route('vendor-profile',$value->name)}}" class="welcome_mall-detail">
+                            {{-- <a href="{{route('vendor-profile',$value->name)}}" class="welcome_mall-detail"> --}}
                                 <div class="welcome_mall-detail--logo">
                                     <figure>
                                         <img class="img img-fluid" src=" @if($value->company_images->first()){{asset('vendor_company_image/'.$value->company_images->first()->image)}} @endif "
@@ -1038,7 +1039,7 @@
 
     <script>
         // Set the date we're counting down to
-        var countDownDate = new Date("Jan 5, 2021 15:37:25").getTime();
+        var countDownDate = new Date("Jan 1, 2021 15:37:25").getTime();
 
         // Update the count down every 1 second
         var x = setInterval(function () {

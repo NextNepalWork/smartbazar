@@ -18,7 +18,7 @@ class DeliveryDestinationController extends Controller
 //            $image = null !== $payment->getImage()?$payment->getImage()->smallUrl: $payment->getDefaultImage()->smallUrl;
 //            $payment->image = $image;
 //        }
-        return view('admin.destination.index',compact('destinations','$orders'));
+        return view('admin.destination.index',compact('destinations'));
 
     }
 

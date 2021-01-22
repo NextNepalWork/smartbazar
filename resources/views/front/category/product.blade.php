@@ -72,6 +72,9 @@
 </div>
 
 @else
+<div class="p-4">
+    <a href="{{ route('request.product.create') }}" class="btn btn-sm btn-success p-2" style="background-color: rgb(0, 37, 202)!important;border-radius:3px!important;">Request Product</a>
+</div>
 <div class="product-category white-product p-4">
     <div class="alert alert-danger alert-status text-center mx-auto ">No Products Found</div>
 </div>

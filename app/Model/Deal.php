@@ -11,7 +11,8 @@ class Deal extends Model
 	use Sluggable;
 
     protected $fillable = [
-    	'name',
+        'name',
+        'end_date',
     	'slug'
     ];
 

@@ -211,11 +211,10 @@
                                        </p>
                                    @endif
                                </div> --}}
-                               <div class="row">
-                                <div class="product-price-container col-md-5 col-12">
+                            
+                                <div class="product-price-container">
                                     <!--<span class="d-block">Special price</span>-->
-                                    <p class="price">
-                                    
+                                    <p class="price">                                    
                                         @if($product->product_price == $product->sale_price)
                                             <span class="Price-amount amount">
                                                 <span class="Price-currencySymbol">Rs&nbsp;</span>{{ number_format($product->product_price) }}
@@ -228,32 +227,16 @@
                                                 <span class="Price-currencySymbol">Rs&nbsp;</span>{{ number_format($product->sale_price) }}
                                             </span>
                                         @endif
-                                    @php
-                                        $discount = round(($product->product_price-$product->sale_price)/$product->product_price*100,0);
-
-                                    @endphp
-                                    @if($discount != 0)
-                                        <div class="dis-tag">
-                                            <figure><img src="{{asset('images/tags/tag.png')}}" alt=""></figure>
-                                            <span class="dis-tag-price">{{$discount}}
-                                                %</span>
-                                        </div>
-
-
-
-                                        @endif
-
+                                        @php
+                                            $discount = round(($product->product_price-$product->sale_price)/$product->product_price*100,0);
+                                        @endphp
+                                        @if($discount != 0)
+                                            <div class="dis-tag">
+                                                <figure><img src="{{asset('images/tags/tag.png')}}" alt=""></figure>
+                                                <span class="dis-tag-price">{{$discount}}%</span>
+                                            </div>
+                                            @endif
                                         </p>
-
-
-                                </div>
-                                @if(isset($product->product_warranty))
-                                        <div class="col-md-7 col-12 mt-2 pl-md-2 pl-0">
-                                            <h5 class="pb-1" style="border-bottom: 1px solid #ddd;font-weight: 600;
-                                            font-size: 20px;">Product Warranty</h5>
-                                            <p class="pt-1"><span class="text-muted">This product has warranty of {{ getWarrantyName($product->product_warranty)}} <span></p>
-                                        </div>
-                                @endif
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -304,12 +287,23 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="select_quantity py-3 row">
-                                    <div class="form-froup">
-                                        <label for="quantity"><h1>Quantity :</h1></label>
-                                        <input class="form" type="number" id="quantity" name="quantity" min="1"
-                                            max="{{ $product->stock_quantity }}"
-                                            placeholder="1">
+
+                                <div class="select_quantity py-3">
+                                    <div class="col-12 row" style="padding-left: 0!important">
+                                        <div class="form-froup col-sm-6 col-12" style="padding-left: 0!important">
+                                            <label for="quantity"><h1>Quantity :</h1></label>
+                                            <input class="form" type="number" id="quantity" name="quantity" min="1"
+                                                max="{{ $product->stock_quantity }}"
+                                                placeholder="1">
+                                        </div>
+                                        
+                                        @if(isset($product->product_warranty))
+                                        <div class="col-sm-6 col-12 mt-2 pl-md-2 pl-0">
+                                            <h5 class="pb-1" style="border-bottom: 1px solid #ddd;font-weight: 600;
+                                            font-size: 20px;">Product Warranty</h5>
+                                            <p class="pt-1"><span class="text-muted">This product has warranty of {{ getWarrantyName($product->product_warranty)}} <span></p>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             @endif

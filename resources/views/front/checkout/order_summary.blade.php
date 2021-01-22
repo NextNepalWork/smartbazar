@@ -170,7 +170,7 @@
                                         @endif
                                         <tr>
                                             <td colspan="3" class="text-right"><strong>Total:</strong></td>
-                                            <td class="text-right" >
+                                            <td class="text-right">
                                                 Rs.<span id="ship_amnt_total">{{ session()->exists('coupon') ? number_format($grandTotal - session()->get('coupon')['discount_value'], 2) : number_format($grandTotal, 2) }}</span></td>
                                         </tr>
                                         </tfoot>

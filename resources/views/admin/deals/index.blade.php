@@ -24,7 +24,8 @@
 					<thead>
 						<tr>
 							<th>SN</th>
-							<th>Name</th>
+                            <th>Name</th>
+                            <th>End Date</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -33,6 +34,7 @@
 						<tr>
 							<th>SN</th>
 							<th>Name</th>
+                            <th>End Date</th>
 							<th>Action</th>
 						</tr>
 					</tfoot>
@@ -56,6 +58,13 @@
                    }
                	},
 				{data: 'name', 
+                    render: function (data, type, row) {
+                        url = "{{ route('admin.deals.edit',':id' ) }}";
+                        url = url.replace(':id', row.id);
+                        return '<a href="'+ url +'">' + data + '</a>';
+                    }
+                },
+				{data: 'end_date', 
                     render: function (data, type, row) {
                         url = "{{ route('admin.deals.edit',':id' ) }}";
                         url = url.replace(':id', row.id);

@@ -164,7 +164,7 @@
                         <div class="hidden-search"
                              style="position: absolute;z-index: 9999;top: -3px;width: 100%;background: white; display: none;">
                             <form class="uk-search uk-search-navbar uk-width-1-1">
-                                <input class="uk-input" type="search" placeholder="Search..." autofocus>
+                                <input class="uk-input" type="search" type="search" name="query" id="searchTextSm" placeholder="Search..." autofocus>
                             </form>
                             <a class="close_search" href="#" uk-close=""
                                style="float: right;color:#666; margin-top: -28px;padding: 0 15px;"></a>

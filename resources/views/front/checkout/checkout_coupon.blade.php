@@ -24,7 +24,8 @@
                 <input type="text" name="coupon_code" class="coupon_code" id="coupon_code_text" placeholder="Coupon code" required>
                 <a class="btn coupon_btn btn-primary btn-sm">Apply Coupon</a>
         </div>
-        <div id="msg">                            
+        <div id="msg"> 
+                                       
         </div>
         <div class="clearfix"></div>
     </div>

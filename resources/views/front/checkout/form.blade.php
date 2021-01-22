@@ -100,6 +100,7 @@
             </div>
 
             <div class="row">
+
                 <div class="col-sm-6 col-12">
                     <label for="mobile">Mobile *</label>
                     <input type="text" name="mobile" class="uk-input" id="mobile"
@@ -109,8 +110,8 @@
                         {{ $errors->first('mobile') }}
                     </span>
                     @endif
-
                 </div>
+
                 <div class="col-sm-6 col-12">
                     <label for="phone">Mobile 2</label>
                     <input type="text" name="phone" class="uk-input" id="phone"
@@ -122,9 +123,12 @@
                     @endif
 
                 </div>
+
             </div>
 
+
             <div class="row">
+            
                 <div class="col-12">
                     <label for="shipping_address">Shipping Place *</label>
                     <label for=""><em>Shipping charge varies according with shipping location</em></label>
@@ -142,6 +146,7 @@
                     </span>
                     @endif
                 </div>
+
             </div>
 
             <div class="row">
@@ -149,7 +154,10 @@
                     <button type="button" class="uk-button next submit">Save this address</button>
                 </div>
             </div>
+
         </div>
+
+
         <div class="col-md-5 col-sm-12 ">
             <div class="box-shadow">
                 <div class="card-header" style="margin-bottom: 10px;">
@@ -212,7 +220,7 @@
                         @endif
                         @if(Cart::instance('prebooking')->count() > 0)
                             @foreach(Cart::instance('prebooking')->content() as $cartContent)
-                                @php
+                                @phpr
                                     $prebooking = App\Model\Product::findOrFail($cartContent->id)->prebooking;
                                 @endphp
                                 <div class="row">
@@ -279,7 +287,7 @@
                             <div class="clearfix"></div>
                         </div>
                         @if(session()->exists('coupon'))
-                            <div class="col-12">
+                            <div class="col-12 cart-summary">
                                 <small>Discount</small>
                                 <div class="float-right"><span class="item-price">Rs. <span
                                                 id="discount"> {{ number_format(session()->get('coupon')['discount_value'], 2) }}</span> </span>
@@ -288,9 +296,10 @@
                             </div>
                         @endif
                     </div>
+                  
                     <hr>
 
-                    <div class="row" style="padding: 0 0 10px">
+                    <div class="row cart-summary" style="padding: 0 0 10px">
                         <div class="col-12">
                             <strong>Order Total</strong>
                             <div class="float-right"><span>Rs.</span><span
@@ -315,7 +324,6 @@
                         {{ $errors->first('order_note') }}
                     </span>
                     @endif
-
                 </div>
             </div>
         </div>

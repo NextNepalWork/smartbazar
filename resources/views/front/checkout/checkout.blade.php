@@ -93,78 +93,79 @@
             });
 
             // coupon function
-            $('.coupon_btn').click(function(e){
-                e.preventDefault();
-                var values = $("input[name='product_id[]']")
-                    .map(function(){return $(this).val();}).get();
-                var coupon = $("input[name=coupon_code").val();
+            // $('.coupon_btn').click(function(e){
+            //     e.preventDefault();
+            //     var values = $("input[name='product_id[]']")
+            //         .map(function(){return $(this).val();}).get();
+            //     var coupon = $("input[name=coupon_code").val();
 
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: 'get',
-                    url: "{{ route('coupon.check.ajax') }}",
-                    data: {
-                        product_id: values,
-                        coupon_code:coupon
-                    },
-                    // beforeSend: function (data) {
-                    //     $(this).button('loading');
-                    // },
-                    success: function (data) {
-                        if (data.status=='error') {
-                            $('#msg').html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.message +
-                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
-                            '<span aria-hidden="true">&times;</span>'+
-                            '</button>'+
-                             '</div>');                        
-                            //  $('#coupon_form').reset();
-                            // $(this).prop('disabled', true);
-                            // $('.alert.alert-danger').fadeOut();
-                            // $('.alert.alert-success').fadeIn();
-                        }
-                        if(data.status=='success') {
-                            $('#msg').html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message +
-                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
-                            '<span aria-hidden="true">&times;</span>'+
-                            '</button>'+
-                             '</div>');
-                            //  $('#coupon_form').reset();
-                            // $(this).prop('disabled', true);
-                            // $('.alert.alert-success').fadeOut();
-                            // $('.alert.alert-success').fadeIn();
-                            setTimeout(function () {
-                            location.reload()
-                            }, 2000);
-                        }
+            //     $.ajaxSetup({
+            //         headers: {
+            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //         }
+            //     });
+            //     $.ajax({
+            //         type: 'get',
+            //         url: "{{ route('coupon.check.ajax') }}",
+            //         data: {
+            //             product_id: values,
+            //             coupon_code:coupon
+            //         },
+            //         // beforeSend: function (data) {
+            //         //     $(this).button('loading');
+            //         // },
+            //         success: function (data) {
+            //             if (data.status=='error') {
+            //                 $('#msg').html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.message +
+            //                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+            //                 '<span aria-hidden="true">&times;</span>'+
+            //                 '</button>'+
+            //                  '</div>');                        
+            //                 //  $('#coupon_form').reset();
+            //                 // $(this).prop('disabled', true);
+            //                 // $('.alert.alert-danger').fadeOut();
+            //                 // $('.alert.alert-success').fadeIn();
+            //             }
+            //             if(data.status=='success') {
+            //                 $('#msg').html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message +
+            //                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+            //                 '<span aria-hidden="true">&times;</span>'+
+            //                 '</button>'+
+            //                  '</div>');
+            //                  $('.cart-summary').load(location.href  + ' .cart-summary');
+            //                 //  $('#coupon_form').reset();
+            //                 // $(this).prop('disabled', true);
+            //                 // $('.alert.alert-success').fadeOut();
+            //                 // $('.alert.alert-success').fadeIn();
+            //                 // setTimeout(function () {
+            //                 // location.reload()
+            //                 // }, 2000);
+            //             }
 
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        // var errorsHolder = '';
-                        // errorsHolder += '<ul>';
+            //         },
+            //         error: function (xhr, ajaxOptions, thrownError) {
+            //             // var errorsHolder = '';
+            //             // errorsHolder += '<ul>';
 
-                        // var err = eval("(" + xhr.responseText + ")");
-                        // $.each(err.errors, function (key, value) {
-                        //     errorsHolder += '<li>' + value + '</li>';
-                        // });
+            //             // var err = eval("(" + xhr.responseText + ")");
+            //             // $.each(err.errors, function (key, value) {
+            //             //     errorsHolder += '<li>' + value + '</li>';
+            //             // });
 
-                        // errorsHolder += '</ul>';
+            //             // errorsHolder += '</ul>';
 
-                        // $('.alert.alert-danger').fadeIn().html(errorsHolder);
-                    }
-                    // ,
-                    // complete: function () {
-                    //     // $("form")[0].reset(),
-                    //     // $(this).button('reset');
-                    //     // $("html, body").animate({scrollTop: 0}, "slow");
-                    // }
-                });
+            //             // $('.alert.alert-danger').fadeIn().html(errorsHolder);
+            //         }
+            //         // ,
+            //         // complete: function () {
+            //         //     // $("form")[0].reset(),
+            //         //     // $(this).button('reset');
+            //         //     // $("html, body").animate({scrollTop: 0}, "slow");
+            //         // }
+            //     });
 
-            });
+            // });
 
         });
     </script>
